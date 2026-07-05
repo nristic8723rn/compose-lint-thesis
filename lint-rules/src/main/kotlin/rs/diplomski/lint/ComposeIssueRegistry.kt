@@ -32,6 +32,6 @@ class ComposeIssueRegistry : IssueRegistry() {
     override val vendor: Vendor = Vendor(
         vendorName = "Diplomski rad - statička analiza Compose koda",
         identifier = "rs.diplomski.lint",
-        feedbackUrl = "https://github.com/TVOJ-NALOG/compose-lint-thesis/issues",
+        feedbackUrl = "https://github.com/nristic8723rn/compose-lint-thesis/issues",
     )
 }
