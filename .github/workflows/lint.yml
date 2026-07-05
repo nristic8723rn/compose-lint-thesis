@@ -1,0 +1,55 @@
+# CI kapija kvaliteta (Faza 1, korak 5).
+#
+# Pokreće se na svaki push na main i na svaki pull request.
+# Dva posla u jednom prolazu:
+#   1. testovi lint pravila (da su sama pravila ispravna)
+#   2. lint nad aplikacijom (da aplikacija poštuje pravila)
+# Ako bilo šta padne, build je crven -> uz branch protection
+# (korak 6) PR ne može da se spoji u main.
+
+name: Lint kapija
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Preuzimanje koda
+        uses: actions/checkout@v4
+
+      # Ista lekcija kao lokalno: AGP 8.x traži JDK 17,
+      # CI mašina ga ne podrazumeva - eksplicitno ga tražimo.
+      - name: JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # Keširanje Gradle zavisnosti - bez ovoga svaki build
+      # skida ceo internet ispočetka (5+ minuta razlike).
+      - name: Gradle podešavanje i keš
+        uses: gradle/actions/setup-gradle@v4
+
+      # Windows gotcha: gradlew ume da stigne bez execute bita.
+      - name: gradlew izvršiv
+        run: chmod +x gradlew
+
+      - name: Testovi pravila + lint aplikacije
+        run: ./gradlew :lint-rules:test :sample-app:lintDebug
+
+      # Izveštaji se čuvaju i kad build PADNE (if: always) -
+      # upravo tada su najpotrebniji. Ovo je i ulazna tačka
+      # za metrički sloj u Fazi 3: XML izveštaj kao artefakt.
+      - name: Čuvanje lint izveštaja
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-izvestaji
+          path: |
+            sample-app/build/reports/
+            lint-rules/build/reports/tests/
