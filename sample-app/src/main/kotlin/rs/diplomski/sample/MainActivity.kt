@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
 // Kad demo prođe (screenshot za rad!), zakomentarisati poziv.
 @Composable
 fun Greeting() {
-    zabranjeno()
+    //zabranjeno()
     Text(text = "Zdravo, svete")
 }
 
