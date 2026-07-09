@@ -15,10 +15,13 @@ import com.android.tools.lint.detector.api.Issue
  */
 class ComposeIssueRegistry : IssueRegistry() {
 
-    // Faza 1, korak 2: probno pravilo. U Fazi 2 ovde ulaze prava
-    // pravila (remember, hardcoded string, ...), a probno se uklanja.
     override val issues: List<Issue> = listOf(
         ZabranjenoDetector.ISSUE,
+        // Pravilo 1 - registrovano ODMAH, jer testovi zaobilaze
+        // registar (gađaju Issue direktno) pa zaboravljenu registraciju
+        // ne bi uhvatili; aplikacija bi tiho ostala bez pravila.
+        RememberDetector.ISSUE_STANJE,
+        RememberDetector.ISSUE_ALOKACIJA,
     )
 
     // API nivo lint-a sa kojim su pravila kompajlirana.
