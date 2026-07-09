@@ -22,6 +22,8 @@ class ComposeIssueRegistry : IssueRegistry() {
         // ne bi uhvatili; aplikacija bi tiho ostala bez pravila.
         RememberDetector.ISSUE_STANJE,
         RememberDetector.ISSUE_ALOKACIJA,
+        // Pravilo 3 - hardkodovani stringovi u Compose UI (I18N).
+        HardkodovaniStringDetector.ISSUE,
     )
 
     // API nivo lint-a sa kojim su pravila kompajlirana.
