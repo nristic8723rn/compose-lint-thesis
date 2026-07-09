@@ -72,13 +72,12 @@ class HardkodovaniStringDetector : Detector(), SourceCodeScanner {
                 // 4. IZUZECI ------------------------------------------
                 if (jeUPreviewFunkciji(node)) return
 
-                // MUTACIONI TEST (privremeno) - report iskljucen namerno.
-                // context.report(
-                //     issue = ISSUE,
-                //     scope = node,
-                //     location = context.getLocation(tekstArg),
-                //     message = PORUKA,
-                // )
+                context.report(
+                    issue = ISSUE,
+                    scope = node,
+                    location = context.getLocation(tekstArg),
+                    message = PORUKA,
+                )
             }
 
             /**

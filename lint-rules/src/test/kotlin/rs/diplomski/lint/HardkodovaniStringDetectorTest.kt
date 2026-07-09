@@ -232,20 +232,19 @@ class HardkodovaniStringDetectorTest {
     }
 
     @Test
-    fun `neg-6 cist sablon bez literalnog teksta se ne prijavljuje`() {
-        // "${'$'}ime" je samo promenljiva - nema hardkodovanog teksta.
+    fun `neg-6 string van composable konteksta (nije Text) se ne prijavljuje`() {
+        // Peti negativni obrazac iz spec-a: pravilo je vezano ISKLJUČIVO za
+        // `text` argument `Text` poziva. Goli string literal u običnoj
+        // (ne-composable, ne-UI) funkciji nije naša briga - da rule ne bi
+        // degenerisao u "flaguj svaki string literal".
         lintZaHardkod().files(
             *ComposeStubovi.SVI_TEXT,
             kotlin(
                 """
                 package test
 
-                import androidx.compose.runtime.Composable
-                import androidx.compose.material3.Text
-
-                @Composable
-                fun Ime(ime: String) {
-                    Text(text = "${'$'}ime")
+                fun formatiraj(): String {
+                    return "obican string van composable konteksta"
                 }
                 """,
             ).indented(),
