@@ -24,6 +24,8 @@ class ComposeIssueRegistry : IssueRegistry() {
         RememberDetector.ISSUE_ALOKACIJA,
         // Pravilo 3 - hardkodovani stringovi u Compose UI (I18N).
         HardkodovaniStringDetector.ISSUE,
+        // Pravilo 2 (v1) - nestabilan tip parametra @Composable funkcije.
+        StabilnostDetector.ISSUE,
     )
 
     // API nivo lint-a sa kojim su pravila kompajlirana.
