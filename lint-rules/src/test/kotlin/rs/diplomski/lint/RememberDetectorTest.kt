@@ -251,6 +251,95 @@ class RememberDetectorTest {
         ).run().expectClean()
     }
 
+    // -----------------------------------------------------------------
+    // PODSLUČAJ A - POTPUNOST (faza 2c): lambda kompromis ZAMENJEN
+    // pozitivnim dokazom. Penjemo se kroz composable lambde, ćutimo tek
+    // kod prve ne-composable (ili nerešive) lambde.
+    // -----------------------------------------------------------------
+
+    @Test
+    fun `A-poz-5 mutableStateOf unutar composable Column bloka - prijavljuje se`() {
+        // NOVO: sadržaj Column-a ima @Composable tip parametra, pa se stanje
+        // ZAISTA gubi na rekompoziciju i unutar njega. Ranije smo ćutali
+        // (lambda kompromis); sada prijavljujemo jer je DOKAZANO da je lambda
+        // composable (pozitivan dokaz).
+        lintZaStanje().files(
+            *ComposeStubovi.SVI,
+            kotlin(
+                """
+                package test
+
+                import androidx.compose.runtime.Composable
+                import androidx.compose.runtime.mutableStateOf
+                import androidx.compose.foundation.layout.Column
+
+                @Composable
+                fun Ekran() {
+                    Column {
+                        val stanje = mutableStateOf(0)
+                    }
+                }
+                """,
+            ).indented(),
+        ).run().expectErrorCount(1)
+    }
+
+    @Test
+    fun `A-neg-7 lambda ciji tip parametra NIJE composable - cuti`() {
+        // Pozitivan dokaz ili ništa: tip parametra `blok` je () -> Unit (bez
+        // @Composable), pa se ne prijavljuje ni kad rezolucija uspe.
+        lintZaStanje().files(
+            *ComposeStubovi.SVI,
+            kotlin(
+                """
+                package test
+
+                import androidx.compose.runtime.Composable
+                import androidx.compose.runtime.mutableStateOf
+
+                fun okvir(blok: () -> Unit) {}
+
+                @Composable
+                fun Ekran() {
+                    okvir {
+                        val stanje = mutableStateOf(0)
+                    }
+                }
+                """,
+            ).indented(),
+        ).run().expectClean()
+    }
+
+    @Test
+    fun `A-neg-8 ne-composable lambda unutar composable Column - cuti`() {
+        // Penjanje staje na PRVOJ ne-composable lambdi: iako je spoljašnji
+        // Column composable, naKlik je događajni handler (ne-composable),
+        // pa se ne izvršava na rekompoziciju -> ćutimo.
+        lintZaStanje().files(
+            *ComposeStubovi.SVI,
+            kotlin(
+                """
+                package test
+
+                import androidx.compose.runtime.Composable
+                import androidx.compose.runtime.mutableStateOf
+                import androidx.compose.foundation.layout.Column
+
+                fun naKlik(akcija: () -> Unit) {}
+
+                @Composable
+                fun Ekran() {
+                    Column {
+                        naKlik {
+                            val stanje = mutableStateOf(0)
+                        }
+                    }
+                }
+                """,
+            ).indented(),
+        ).run().expectClean()
+    }
+
     // =================================================================
     // PODSLUČAJ B - POZITIVNI
     // =================================================================

@@ -46,8 +46,8 @@ class RememberDetector : Detector(), SourceCodeScanner {
                     else -> return
                 }
 
-                // 2. PENJANJE -----------------------------------------
-                if (jeUnutarLambde(node)) return
+                // 2. PENJANJE (pozitivan dokaz) -----------------------
+                if (jeUnutarNecomposableLambde(node)) return
 
                 // 3. KONTEKST -----------------------------------------
                 val funkcija = node.getContainingUMethod() ?: return
@@ -79,14 +79,37 @@ class RememberDetector : Detector(), SourceCodeScanner {
                 return klasa.qualifiedName in skupiTipovi(context)
             }
 
-            /** true ako se između poziva i obuhvatajuće funkcije nalazi lambda. */
-            private fun jeUnutarLambde(node: UCallExpression): Boolean {
+            /**
+             * Penjanje od poziva ka obuhvatajućoj funkciji uz POZITIVAN DOKAZ:
+             * za svaku lambdu na putu razrešava se tip parametra kome je
+             * prosleđena.
+             *  - tip @Composable -> lambda se izvršava na rekompoziciju,
+             *    penjemo dalje;
+             *  - nije composable ILI rezolucija ne uspe -> ćutimo (dokaza nema).
+             *
+             * Time je lambda kompromis ZAMENJEN: umesto „ćuti u BILO KOJOJ
+             * lambdi", prijavljujemo i unutar composable lambdi (Column { }),
+             * a i dalje ćutimo u remember/onClick/efekt blokovima jer njihov
+             * tip parametra NIJE @Composable (() -> T, suspend () -> Unit...).
+             */
+            private fun jeUnutarNecomposableLambde(node: UCallExpression): Boolean {
                 var trenutni = node.uastParent
                 while (trenutni != null && trenutni !is UMethod) {
-                    if (trenutni is ULambdaExpression) return true
+                    if (trenutni is ULambdaExpression && !jeComposableLambda(trenutni)) {
+                        return true
+                    }
                     trenutni = trenutni.uastParent
                 }
                 return false
+            }
+
+            /** true SAMO ako je dokazano da je tip parametra lambde @Composable. */
+            private fun jeComposableLambda(lambda: ULambdaExpression): Boolean {
+                val poziv = lambda.uastParent as? UCallExpression ?: return false
+                val metod = poziv.resolve() ?: return false
+                val param = context.evaluator.computeArgumentMapping(poziv, metod)[lambda]
+                    ?: return false
+                return param.type.annotations.any { it.qualifiedName == ANOTACIJA_COMPOSABLE }
             }
 
             private fun jeComposable(funkcija: UMethod): Boolean =
