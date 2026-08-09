@@ -82,5 +82,31 @@ object Zapis {
         }
     }
 
+    /** Učitaj CSV (sa zaglavljem) natrag u merne tačke — ulaz za trend. */
+    fun ucitajCsv(tekst: String): List<MernaTacka> {
+        val linije = tekst.lineSequence().filter { it.isNotBlank() }.toList()
+        if (linije.isEmpty()) return emptyList()
+        val zaglavlje = linije.first().split(",")
+        val idx = zaglavlje.withIndex().associate { (i, ime) -> ime to i }
+        fun kol(polja: List<String>, ime: String): String {
+            val i = idx[ime] ?: throw MetrikaGreska("CSV nema kolonu '$ime'")
+            return polja[i]
+        }
+        return linije.drop(1).map { red ->
+            val p = red.split(",")
+            MernaTacka(
+                commitHash = kol(p, "commit_hash"),
+                datum = kol(p, "datum"),
+                kloc = kol(p, "kloc").toDouble(),
+                brojComposable = kol(p, "broj_composable").toInt(),
+                poPravilu = Pravila.REDOSLED.associateWith { kol(p, it).toInt() },
+                ponderisaniZbir = kol(p, "ponderisani_zbir").toDouble(),
+                dugPoKloc = kol(p, "dug_po_kloc").toDouble(),
+                dugPoComposable = kol(p, "dug_po_composable").toDouble(),
+                ukupnoTudjih = kol(p, "ukupno_tudjih_upozorenja").toInt(),
+            )
+        }
+    }
+
     private fun fmt(x: Double): String = String.format(Locale.ROOT, "%.4f", x)
 }
