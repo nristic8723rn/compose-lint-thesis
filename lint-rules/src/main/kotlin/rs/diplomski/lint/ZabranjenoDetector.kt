@@ -20,6 +20,12 @@ import org.jetbrains.uast.UCallExpression
  *
  * Ujedno je i šablon za prava pravila iz Faze 2: ista struktura
  * (Detector + SourceCodeScanner + Issue.create) važi i za njih.
+ *
+ * NAPOMENA (faza 2g): ovo pravilo se VIŠE NE REGISTRUJE u
+ * [ComposeIssueRegistry] — njegova misija (dokaz lanca u fazi 1) je
+ * završena i dokumentovana (screenshotovi postoje), pa je sklonjeno iz
+ * isporuke da ne bi unosilo lažni šum u izveštaje. Klasa i njena dva testa
+ * SVESNO ostaju u repou kao artefakt rada (šablon + istorija razvoja).
  */
 class ZabranjenoDetector : Detector(), SourceCodeScanner {
 

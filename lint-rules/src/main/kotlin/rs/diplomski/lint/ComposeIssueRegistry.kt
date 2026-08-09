@@ -15,8 +15,12 @@ import com.android.tools.lint.detector.api.Issue
  */
 class ComposeIssueRegistry : IssueRegistry() {
 
+    // ZabranjenoDetector.ISSUE se NAMERNO više ne isporučuje (faza 2g):
+    // probno pravilo je odradilo svoju misiju (dokaz lanca u fazi 1), pa je
+    // sklonjeno iz isporuke da izveštaji ne bi imali lažni šum. Klasa i njeni
+    // testovi ostaju u repou kao artefakt rada. Registar isporučuje tačno 4
+    // pravila (Issue-a): 2 iz pravila 1, pravilo 2 i pravilo 3.
     override val issues: List<Issue> = listOf(
-        ZabranjenoDetector.ISSUE,
         // Pravilo 1 - registrovano ODMAH, jer testovi zaobilaze
         // registar (gađaju Issue direktno) pa zaboravljenu registraciju
         // ne bi uhvatili; aplikacija bi tiho ostala bez pravila.
