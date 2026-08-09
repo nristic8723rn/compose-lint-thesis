@@ -37,4 +37,27 @@ object Metrika {
             dugPoComposable = if (brojComposable > 0) zbir / brojComposable else 0.0,
         )
     }
+
+    /** Sastavi jednu mernu tačku iz parsiranog izveštaja + normalizacije. */
+    fun mernaTacka(
+        commitHash: String,
+        datum: String,
+        izvestaj: ParsiranIzvestaj,
+        norm: Normalizacija,
+        ponderi: Map<String, Ponder>,
+    ): MernaTacka {
+        val poPravilu = izvestaj.poPravilu()
+        val a = agregiraj(poPravilu, ponderi, norm.kloc, norm.brojComposable)
+        return MernaTacka(
+            commitHash = commitHash,
+            datum = datum,
+            kloc = norm.kloc,
+            brojComposable = norm.brojComposable,
+            poPravilu = poPravilu,
+            ponderisaniZbir = a.ponderisaniZbir,
+            dugPoKloc = a.dugPoKloc,
+            dugPoComposable = a.dugPoComposable,
+            ukupnoTudjih = izvestaj.ukupnoTudjih,
+        )
+    }
 }
