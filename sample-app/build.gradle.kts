@@ -40,6 +40,12 @@ android {
         xmlReport = true
         htmlReport = true
         textReport = true
+
+        // BASELINE (faza 3b, Zadatak A): zatečeni dug se prihvata u baseline,
+        // a samo NOVI prekršaji se prijavljuju i mogu da obore build. Ovo je
+        // strategija uvođenja alata u živ projekat (videti docs/politika-primene.md).
+        // Regenerisati komandom: gradlew :sample-app:updateLintBaseline
+        baseline = file("lint-baseline.xml")
     }
 }
 

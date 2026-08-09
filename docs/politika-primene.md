@@ -42,3 +42,45 @@ je mnogo veća nego kod upozorenja, pa blokiramo samo ono u šta smo sigurni.
   `UnrememberedMutableState` ima bolji doseg. Vrednost našeg pravila je drugde:
   ERROR-ozbiljnost (politika kapije), integracija u okvir i kombinovani
   izveštaj. Detaljan dokaz i merenje: `docs/2c-prototip.md`.
+
+## Uvođenje u postojeći projekat (baseline strategija)
+
+Uvođenje statičke analize u živ projekat ne sme da bude „sve odjednom": realan
+projekat već ima zatečeni tehnički dug, i kad bi kapija odmah blokirala svaki
+zatečeni prekršaj, tim bi bio zatrpan i alat bi se ugasio prvog dana. Zato se
+koristi **baseline**.
+
+**Kako radi.** Pri uvođenju se generiše `lint-baseline.xml`, snimak SVIH
+zatečenih nalaza. Od tog trenutka lint prijavljuje SAMO nove prekršaje (one
+kojih nema u baseline-u); zatečeni su „zamrznuti" i ne obaraju build. Time novi
+kod drži standard, a stari dug se ne ignoriše — samo se odlaže.
+
+**Komande (sample-app kao primer).** U `lint { baseline = file("lint-baseline.xml") }`,
+pa:
+
+- generisanje/osvežavanje baseline-a: `gradlew :sample-app:updateLintBaseline`
+- provera (samo novi prekršaji obaraju build): `gradlew :sample-app:lintDebug`
+
+**Disciplina: baseline se SMANJUJE, nikad ne raste.** Broj stavki u
+`lint-baseline.xml` je sam po sebi metrika duga — cilj je da monotono opada.
+Novi prekršaj se NE dodaje u baseline (to bi bilo skrivanje duga); baseline se
+osvežava tek pošto se zatečeni dug stvarno otkloni, čime se stavke uklanjaju.
+Rast baseline-a između dva komita je crveni signal (dug koji se gura pod tepih).
+
+**Ograničenje za metrički sloj (izmereno, ne izmišljeno).** Kad je baseline
+aktivan, lint XML izveštaj sadrži SAMO nove nalaze — zatečeni (baseline-ovani)
+nalazi u njemu NE postoje (provereno na sample-app: `HardkodovaniString` je
+posle baseline-a 0 u izveštaju, iako stvarni dug postoji). Dakle jedan izveštaj
+ne razlikuje „pokriveno baseline-om" od „novo" — vidi se samo „novo".
+
+**Predloženo rešenje (bez izmišljanja podatka):**
+
+1. **Parsirati i `lint-baseline.xml` istim parserom.** Baseline je u ISTOM
+   `<issues><issue id=.../>` formatu, pa ga `LintParser` čita bez izmena:
+   baseline fajl → broj zatečenih (pokrivenih) po pravilu; izveštaj → broj
+   novih po pravilu; ukupno = zatečeno + novo. (Preporučeno — najjeftinije.)
+2. **Alternativa: dva puštanja** lint-a, sa i bez baseline-a; „pokriveno" =
+   ukupno (bez baseline-a) − novo (sa baseline-om).
+
+Za trend duga preko istorije (Faza 4) metrika treba UKUPAN dug (bez baseline-a),
+a za kapiju je relevantan samo priraštaj (novo) — pa se oba broja vode.
