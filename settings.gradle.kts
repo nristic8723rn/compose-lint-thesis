@@ -18,3 +18,4 @@ rootProject.name = "compose-lint-thesis"
 
 include(":lint-rules")
 include(":sample-app")
+include(":metrika")

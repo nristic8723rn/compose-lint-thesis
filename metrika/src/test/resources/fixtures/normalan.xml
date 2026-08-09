@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 8.7.3">
+    <issue id="StanjeBezRemember" severity="Error" message="Stanje van remember bloka" category="Correctness" priority="8">
+        <location file="/proj/A.kt" line="10" column="5"/>
+    </issue>
+    <issue id="HardkodovaniString" severity="Warning" message="Hardkodovan tekst" category="Internationalization" priority="5">
+        <location file="/proj/B.kt" line="20" column="9"/>
+    </issue>
+    <issue id="HardkodovaniString" severity="Warning" message="Hardkodovan tekst" category="Internationalization" priority="5">
+        <location file="/proj/C.kt" line="30" column="9"/>
+    </issue>
+    <issue id="NestabilanTipParametra" severity="Warning" message="Nestabilan tip parametra" category="Performance" priority="5">
+        <location file="/proj/D.kt" line="40" column="5"/>
+    </issue>
+    <issue id="MissingApplicationIcon" severity="Warning" message="tudje upozorenje" category="Correctness" priority="5">
+        <location file="/proj/AndroidManifest.xml" line="4" column="6"/>
+    </issue>
+    <issue id="UnrememberedMutableState" severity="Error" message="google-ovo tudje pravilo" category="Correctness" priority="8">
+        <location file="/proj/A.kt" line="10" column="5"/>
+    </issue>
+</issues>
