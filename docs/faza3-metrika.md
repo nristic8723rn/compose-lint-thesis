@@ -49,37 +49,49 @@ pomakom pondera, metrika je krhka; ako su stabilni, robusna.
 
 ## Izlazni zapis
 
-Jedan red po mernoj tački: `commit_hash, datum, kloc, broj_composable`, broj
-nalaza za **sva 4** pravila (uvek, i kad je 0), `ponderisani_zbir`,
+Jedan red po mernoj tački: `projekat, commit_hash, datum, kloc, broj_composable`,
+broj nalaza za **sva 4** pravila (uvek, i kad je 0), `ponderisani_zbir`,
 `dug_po_kloc`, `dug_po_composable`, `ukupno_tudjih_upozorenja`. Format: CSV
 (dopisivanje jednog fajla) + isti sadržaj kao JSON red. Bez baze. Decimale se
 pišu sa `Locale.ROOT` (tačka), da srpski locale ne ubaci zarez u CSV.
 
+**Polje `projekat` (ispravka 3b):** merna tačka pripada projektu; bez toga bi se
+tačke različitih projekata mešale u jednu liniju (obmanjujuće). Trend se crta
+PO PROJEKTU (vidi dole).
+
+**Deljenje nulom → prazno, ne 0 (ispravka 3b):** kad je delilac 0 (nema `.kt`
+ili nema `@Composable`), odnos je NULL — prazno polje u CSV-u, `null` u JSON-u.
+Odsustvo podatka nije „nula duga"; red ostaje, tačka se u grafiku preskače.
+
 ## Trend izveštaj
 
-Samostalan HTML (inline SVG, bez CDN-a, radi offline iz CI artefakta): linijski
+Samostalan HTML (inline SVG, bez CDN-a, radi offline iz CI artefakta). **Po
+projektu:** svaki projekat dobija svoju sekciju (svoji grafikoni, tabela,
+legenda) — projekti se NIKAD ne spajaju u jednu liniju. Ako projekat ima < 3
+merne tačke, iznad grafika stoji upozorenje „nedovoljno tačaka za trend". Prazne
+vrednosti (deljenje nulom) se u grafiku preskaču (prekid linije). Po projektu:
 grafikon obe normalizovane metrike, ISPOD njega obavezno razbijanje po pravilu
-(agregat se nikad ne prikazuje sam), tabela sirovih brojeva, i legenda šta koje
-pravilo znači. Namenjeno menadžmentu (srpski naslovi, datum generisanja).
+(agregat se nikad ne prikazuje sam), tabela, legenda. Namenjeno menadžmentu.
 
-## Otvorena pitanja (za chat, nisu presečena)
+## Rešena pitanja (ratifikovano u chatu — odluke 10–12 u CLAUDE.md)
 
-1. **Merna tačka bez `.kt` fajlova ili bez `@Composable`.** Tada je delilac 0.
-   Privremeno vraćamo `0.0` za taj odnos. Da li je ispravnije `0`, `null`
-   (izostaviti vrednost) ili preskočiti red u trendu — odluka za chat. Trenutno
-   ponašanje je dokumentovano u `Metrika.agregiraj`.
-2. **Datum merne tačke.** CLI prima `--datum` (podrazumevano današnji), a ne
-   izvlači datum komita iz gita — modul je namerno git-agnostičan. Da li trend
-   treba da koristi datum komita umesto datuma merenja — pitanje za chat.
+1. **Deljenje nulom → prazno (null), ne 0.0.** Vidi gore i `Metrika.agregiraj`.
+2. **Datum je AUTHOR DATE komita**, koji poziva prosleđuje iz gita
+   (`git show -s --format=%ad --date=short <hash>`); modul ostaje git-agnostičan.
+   Podrazumevani današnji datum je SAMO za ručno puštanje, tako označen u `--help`.
+3. **Razbijanje po projektu** (polje `projekat`) + upozorenje za < 3 tačke.
 
-## Provera na stvarnim podacima (Zadatak 6)
+## Provera na stvarnim podacima (Zadatak 6, regenerisano u 3b)
 
-Ceo lanac pušten nad dve merne tačke (artefakti: `docs/faza3-proba/`):
+Ceo lanac pušten nad dve merne tačke, u DVA odvojena izveštaja po projektu
+(artefakti: `docs/faza3-proba/trend-jetsnack.html`, `trend-sample-app.html`;
+zajednički CSV `trend.csv`):
 
-| Merna tačka | KLOC | @Composable | Stanje/Alok/Nestab/Hardkod | Pond. zbir | Tuđih |
-|---|---|---|---|---|---|
-| Jetsnack (`bc182640`) | 6.978 | 149 | 0 / 0 / 31 / 2 | 45.40 | 47 |
-| sample-app | 0.028 | 1 | 0 / 0 / 0 / 1 | 1.00 | 1 |
+| Projekat | Komit | Datum | KLOC | @Composable | Stanje/Alok/Nestab/Hardkod | Pond. zbir | Tuđih |
+|---|---|---|---|---|---|---|---|
+| jetsnack | `bc182640` | 2026-06-19 | 6.978 | 149 | 0 / 0 / 31 / 2 | 45.40 | 47 |
+| sample-app | `05d93ef` | 2026-08-09 | 0.028 | 1 | 0 / 0 / 0 / 1 | 1.00 | 1 |
 
 Jetsnack brojevi (Nestabilan 31, Hardkod 2) se **poklapaju** sa 2g izveštajem —
 parser je ispravan. Tuđih 47 + naših 33 = 80 (ukupno upozorenja u 2g izveštaju).
+Svaki projekat ima < 3 tačke, pa oba izveštaja nose upozorenje o trendu.

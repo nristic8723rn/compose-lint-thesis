@@ -13,14 +13,16 @@ import java.util.Locale
  * zarez i ne pokvari CSV (koji je zarezom razdvojen).
  */
 data class MernaTacka(
+    val projekat: String,
     val commitHash: String,
     val datum: String,
     val kloc: Double,
     val brojComposable: Int,
     val poPravilu: Map<String, Int>,
     val ponderisaniZbir: Double,
-    val dugPoKloc: Double,
-    val dugPoComposable: Double,
+    // null (prazno) kad je delilac 0 — vidi Metrika.agregiraj.
+    val dugPoKloc: Double?,
+    val dugPoComposable: Double?,
     val ukupnoTudjih: Int,
 )
 
@@ -28,7 +30,7 @@ object Zapis {
 
     /** Fiksne kolone CSV-a — pravila u kanonskom redosledu, uvek sva 4. */
     val CSV_KOLONE: List<String> =
-        listOf("commit_hash", "datum", "kloc", "broj_composable") +
+        listOf("projekat", "commit_hash", "datum", "kloc", "broj_composable") +
             Pravila.REDOSLED +
             listOf("ponderisani_zbir", "dug_po_kloc", "dug_po_composable", "ukupno_tudjih_upozorenja")
 
@@ -36,14 +38,15 @@ object Zapis {
 
     fun csvRed(t: MernaTacka): String {
         val polja = buildList {
+            add(t.projekat)
             add(t.commitHash)
             add(t.datum)
             add(fmt(t.kloc))
             add(t.brojComposable.toString())
             Pravila.REDOSLED.forEach { add((t.poPravilu[it] ?: 0).toString()) }
             add(fmt(t.ponderisaniZbir))
-            add(fmt(t.dugPoKloc))
-            add(fmt(t.dugPoComposable))
+            add(fmtOpt(t.dugPoKloc))       // prazno polje kad je null
+            add(fmtOpt(t.dugPoComposable)) // prazno polje kad je null
             add(t.ukupnoTudjih.toString())
         }
         return polja.joinToString(",")
@@ -52,14 +55,15 @@ object Zapis {
     fun jsonRed(t: MernaTacka): String {
         val poPravilu = Pravila.REDOSLED.joinToString(",") { "\"$it\":${t.poPravilu[it] ?: 0}" }
         return "{" +
+            "\"projekat\":\"${t.projekat}\"," +
             "\"commit_hash\":\"${t.commitHash}\"," +
             "\"datum\":\"${t.datum}\"," +
             "\"kloc\":${fmt(t.kloc)}," +
             "\"broj_composable\":${t.brojComposable}," +
             "\"po_pravilu\":{$poPravilu}," +
             "\"ponderisani_zbir\":${fmt(t.ponderisaniZbir)}," +
-            "\"dug_po_kloc\":${fmt(t.dugPoKloc)}," +
-            "\"dug_po_composable\":${fmt(t.dugPoComposable)}," +
+            "\"dug_po_kloc\":${jsonOpt(t.dugPoKloc)}," +      // null kad je prazno
+            "\"dug_po_composable\":${jsonOpt(t.dugPoComposable)}," +
             "\"ukupno_tudjih_upozorenja\":${t.ukupnoTudjih}" +
             "}"
     }
@@ -95,18 +99,25 @@ object Zapis {
         return linije.drop(1).map { red ->
             val p = red.split(",")
             MernaTacka(
+                projekat = kol(p, "projekat"),
                 commitHash = kol(p, "commit_hash"),
                 datum = kol(p, "datum"),
                 kloc = kol(p, "kloc").toDouble(),
                 brojComposable = kol(p, "broj_composable").toInt(),
                 poPravilu = Pravila.REDOSLED.associateWith { kol(p, it).toInt() },
                 ponderisaniZbir = kol(p, "ponderisani_zbir").toDouble(),
-                dugPoKloc = kol(p, "dug_po_kloc").toDouble(),
-                dugPoComposable = kol(p, "dug_po_composable").toDouble(),
+                dugPoKloc = kol(p, "dug_po_kloc").ifBlank { null }?.toDouble(),
+                dugPoComposable = kol(p, "dug_po_composable").ifBlank { null }?.toDouble(),
                 ukupnoTudjih = kol(p, "ukupno_tudjih_upozorenja").toInt(),
             )
         }
     }
 
     private fun fmt(x: Double): String = String.format(Locale.ROOT, "%.4f", x)
+
+    /** Prazno polje (CSV) kad je vrednost null. */
+    private fun fmtOpt(x: Double?): String = if (x == null) "" else fmt(x)
+
+    /** JSON null kad je vrednost odsutna. */
+    private fun jsonOpt(x: Double?): String = if (x == null) "null" else fmt(x)
 }

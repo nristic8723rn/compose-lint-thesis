@@ -33,16 +33,19 @@ fun main(args: Array<String>) {
 }
 
 private fun komandaIzvestaj(z: Map<String, String>) {
+    val projekat = obavezno(z, "--projekat")
     val xml = Files.readString(putanja(z, "--xml"))
     val koren = putanja(z, "--izvor")
     val commit = obavezno(z, "--commit")
+    // --datum je AUTHOR DATE komita; poziva ga prosleđuje iz gita. Podrazumevani
+    // današnji datum je SAMO za ručno puštanje (modul ostaje git-agnostičan).
     val datum = z["--datum"] ?: LocalDate.now().toString()
     val ponderi = z["--ponderi"]?.let { Ponderi.izTeksta(Files.readString(Path.of(it))) }
         ?: Ponderi.PODRAZUMEVANI
 
     val izvestaj = LintParser.parsiraj(xml)
     val norm = Normalizatori.izbrojNad(koren)
-    val tacka = Metrika.mernaTacka(commit, datum, izvestaj, norm, ponderi)
+    val tacka = Metrika.mernaTacka(projekat, commit, datum, izvestaj, norm, ponderi)
 
     Zapis.dopisiCsv(putanja(z, "--csv"), tacka)
     z["--json"]?.let { staza ->
@@ -66,7 +69,10 @@ private fun komandaIzvestaj(z: Map<String, String>) {
 }
 
 private fun komandaTrend(z: Map<String, String>) {
-    val tacke = Zapis.ucitajCsv(Files.readString(putanja(z, "--csv")))
+    val sve = Zapis.ucitajCsv(Files.readString(putanja(z, "--csv")))
+    // --projekat (opciono) filtrira na jedan projekat -> jedan izveštaj = jedan
+    // projekat. Bez filtera, izveštaj ima zasebnu sekciju po projektu.
+    val tacke = z["--projekat"]?.let { p -> sve.filter { it.projekat == p } } ?: sve
     val html = TrendIzvestaj.generisi(tacke, LocalDate.now().toString())
     val izlaz = putanja(z, "--html")
     izlaz.parent?.let { Files.createDirectories(it) }
@@ -100,9 +106,17 @@ private fun pomoc() {
         metrika — metrički sloj (faza 3)
 
         Komande:
-          izvestaj --xml <lint.xml> --izvor <koren> --commit <hash>
+          izvestaj --projekat <naziv> --xml <lint.xml> --izvor <koren> --commit <hash>
                    [--datum yyyy-MM-dd] [--ponderi <config>] --csv <out.csv> [--json <out.jsonl>]
-          trend    --csv <in.csv> --html <out.html>
+          trend    --csv <in.csv> --html <out.html> [--projekat <naziv>]
+
+        Napomene:
+          --datum je AUTHOR DATE komita; poziva ga prosleđuje iz gita
+                   (npr. `git show -s --format=%ad --date=short <hash>`).
+                   Ako se izostavi, uzima se DANAŠNJI datum — samo za ručno
+                   puštanje; za istorijske merne tačke UVEK proslediti datum komita.
+          trend bez --projekat pravi zasebnu sekciju po projektu (nikad spojeno);
+                sa --projekat filtrira na jedan projekat = jedan izveštaj.
         """.trimIndent(),
     )
 }

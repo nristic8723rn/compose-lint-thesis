@@ -8,8 +8,10 @@ package rs.diplomski.metrika
  */
 data class Agregat(
     val ponderisaniZbir: Double,
-    val dugPoKloc: Double,
-    val dugPoComposable: Double,
+    // null (ne 0.0) kad je delilac 0 — odsustvo podatka, ne „nula duga".
+    // Tačka se u grafikonu preskače (prekid linije), red ostaje.
+    val dugPoKloc: Double?,
+    val dugPoComposable: Double?,
 )
 
 object Metrika {
@@ -17,10 +19,10 @@ object Metrika {
     /**
      * Čist izračun agregata (bez I/O).
      *
-     * OTVORENO PITANJE (ostavljeno za chat, ne presecam): ako merna tačka nema
-     * .kt fajlova (kloc = 0) ili nema @Composable (0), delilac je 0. Privremeno
-     * vraćamo 0.0 za taj odnos; da li je ispravnije 0, null ili izostaviti red
-     * — odluka za chat. Videti docs/faza3-metrika.md.
+     * ODLUKA (faza 3b): ako merna tačka nema .kt fajlova (kloc = 0) ili nema
+     * @Composable (0), delilac je 0 pa je odnos NULL (prazno), ne 0.0 — odsustvo
+     * podatka nije „nula duga". U CSV-u prazno polje, u JSON-u null, u grafikonu
+     * prekid linije.
      */
     fun agregiraj(
         poPravilu: Map<String, Int>,
@@ -33,13 +35,14 @@ object Metrika {
         }
         return Agregat(
             ponderisaniZbir = zbir,
-            dugPoKloc = if (kloc > 0.0) zbir / kloc else 0.0,
-            dugPoComposable = if (brojComposable > 0) zbir / brojComposable else 0.0,
+            dugPoKloc = if (kloc > 0.0) zbir / kloc else null,
+            dugPoComposable = if (brojComposable > 0) zbir / brojComposable else null,
         )
     }
 
     /** Sastavi jednu mernu tačku iz parsiranog izveštaja + normalizacije. */
     fun mernaTacka(
+        projekat: String,
         commitHash: String,
         datum: String,
         izvestaj: ParsiranIzvestaj,
@@ -49,6 +52,7 @@ object Metrika {
         val poPravilu = izvestaj.poPravilu()
         val a = agregiraj(poPravilu, ponderi, norm.kloc, norm.brojComposable)
         return MernaTacka(
+            projekat = projekat,
             commitHash = commitHash,
             datum = datum,
             kloc = norm.kloc,

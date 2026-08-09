@@ -1,6 +1,7 @@
 package rs.diplomski.metrika
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 /**
@@ -22,8 +23,8 @@ class AgregatTest {
         val a = Metrika.agregiraj(poPravilu, Ponderi.PODRAZUMEVANI, kloc = 2.0, brojComposable = 8)
         // 1*3.0 + 0*1.4 + 1*1.4 + 2*1.0 = 6.4
         assertEquals(6.4, a.ponderisaniZbir, 1e-9)
-        assertEquals(3.2, a.dugPoKloc, 1e-9)         // 6.4 / 2.0
-        assertEquals(0.8, a.dugPoComposable, 1e-9)   // 6.4 / 8
+        assertEquals(3.2, a.dugPoKloc!!, 1e-9)         // 6.4 / 2.0
+        assertEquals(0.8, a.dugPoComposable!!, 1e-9)   // 6.4 / 8
     }
 
     @Test
@@ -36,10 +37,10 @@ class AgregatTest {
     }
 
     @Test
-    fun `delilac nula - odnos je 0 (otvoreno pitanje, dokumentovano)`() {
+    fun `delilac nula - odnos je NULL (prazno), ne 0`() {
         val a = Metrika.agregiraj(poPravilu, Ponderi.PODRAZUMEVANI, kloc = 0.0, brojComposable = 0)
         assertEquals(6.4, a.ponderisaniZbir, 1e-9)
-        assertEquals(0.0, a.dugPoKloc, 1e-9)
-        assertEquals(0.0, a.dugPoComposable, 1e-9)
+        assertNull(a.dugPoKloc)
+        assertNull(a.dugPoComposable)
     }
 }

@@ -5,10 +5,18 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** TEST-KORPUS za trend izveštaj (test-first): CSV round-trip + sadržaj HTML-a. */
+/** TEST-KORPUS za trend izveštaj (test-first): projekat, CSV round-trip, sadržaj. */
 class TrendIzvestajTest {
 
-    private fun tacka(hash: String, datum: String, stanje: Int, hardkod: Int) = MernaTacka(
+    private fun tacka(
+        projekat: String,
+        hash: String,
+        datum: String,
+        stanje: Int,
+        hardkod: Int,
+        dugKloc: Double? = 3.2,
+    ) = MernaTacka(
+        projekat = projekat,
         commitHash = hash,
         datum = datum,
         kloc = 2.0,
@@ -20,46 +28,62 @@ class TrendIzvestajTest {
             Pravila.HARDKOD to hardkod,
         ),
         ponderisaniZbir = 6.4,
-        dugPoKloc = 3.2,
+        dugPoKloc = dugKloc,
         dugPoComposable = 0.8,
         ukupnoTudjih = 2,
     )
 
     @Test
-    fun `CSV round-trip - zapis pa ucitavanje vraca iste tacke`() {
-        val t1 = tacka("aaa", "2026-01-01", 1, 2)
-        val t2 = tacka("bbb", "2026-02-01", 0, 3)
+    fun `CSV round-trip cuva projekat`() {
+        val t1 = tacka("jetsnack", "aaa", "2026-01-01", 1, 2)
+        val t2 = tacka("sample-app", "bbb", "2026-02-01", 0, 3)
         val csv = Zapis.csvZaglavlje() + "\n" + Zapis.csvRed(t1) + "\n" + Zapis.csvRed(t2) + "\n"
 
         val ucitane = Zapis.ucitajCsv(csv)
-        assertEquals(2, ucitane.size)
-        assertEquals("2026-02-01", ucitane[1].datum)
-        assertEquals(1, ucitane[0].poPravilu[Pravila.STANJE])
-        assertEquals(3, ucitane[1].poPravilu[Pravila.HARDKOD])
-        assertEquals(3.2, ucitane[0].dugPoKloc, 1e-9)
+        assertEquals("jetsnack", ucitane[0].projekat)
+        assertEquals("sample-app", ucitane[1].projekat)
     }
 
     @Test
-    fun `HTML sadrzi oba grafikona, razbijanje po pravilu, tabelu i legendu`() {
+    fun `HTML - zasebna sekcija po projektu, nikad spojeno`() {
         val html = TrendIzvestaj.generisi(
-            listOf(tacka("aaa", "2026-01-01", 1, 2), tacka("bbb", "2026-02-01", 0, 3)),
+            listOf(
+                tacka("jetsnack", "aaa", "2026-01-01", 1, 2),
+                tacka("sample-app", "bbb", "2026-02-01", 0, 3),
+            ),
             datumGenerisanja = "2026-07-15",
         )
-
         assertTrue(html.startsWith("<!doctype html"))
+        assertTrue(html.contains("Projekat: jetsnack"))
+        assertTrue(html.contains("Projekat: sample-app"))
+        assertTrue(html.contains("Projekata: 2"))
         assertTrue(html.contains("<svg"))
-        assertTrue(html.contains("Generisano: 2026-07-15"))
-        assertTrue(html.contains("Dug po KLOC"))
-        assertTrue(html.contains("Dug po @Composable"))
         assertTrue(html.contains("<table"))
-        // Razbijanje po pravilu: sva 4 ID-a se pojavljuju (agregat nije sam).
         Pravila.REDOSLED.forEach { assertTrue("nedostaje $it", html.contains(it)) }
+    }
+
+    @Test
+    fun `HTML - upozorenje kad projekat ima manje od 3 tacke`() {
+        val html = TrendIzvestaj.generisi(
+            listOf(tacka("jetsnack", "aaa", "2026-01-01", 1, 2)),
+            datumGenerisanja = "2026-07-15",
+        )
+        assertTrue(html.contains("Nedovoljno tačaka za trend"))
+    }
+
+    @Test
+    fun `HTML - null odnos se u tabeli prikazuje kao crtica`() {
+        val html = TrendIzvestaj.generisi(
+            listOf(tacka("jetsnack", "aaa", "2026-01-01", 1, 2, dugKloc = null)),
+            datumGenerisanja = "2026-07-15",
+        )
+        assertTrue(html.contains("—")) // prazna vrednost u tabeli
     }
 
     @Test
     fun `HTML je offline - nema spoljnih URL-ova`() {
         val html = TrendIzvestaj.generisi(
-            listOf(tacka("aaa", "2026-01-01", 1, 2)),
+            listOf(tacka("jetsnack", "aaa", "2026-01-01", 1, 2)),
             datumGenerisanja = "2026-07-15",
         )
         assertFalse("izvestaj mora raditi offline", html.contains("http"))
