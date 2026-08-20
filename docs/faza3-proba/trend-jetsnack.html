@@ -8,27 +8,30 @@
 body { font-family: system-ui, Arial, sans-serif; margin: 24px; color: #1a1a1a; background: #fff; }
 h1 { font-size: 22px; } h2 { font-size: 18px; margin-top: 30px; border-top: 2px solid #eee; padding-top: 14px; }
 h3 { font-size: 15px; margin: 18px 0 6px; color: #333; }
-.meta { color: #555; } .opis { color: #444; max-width: 720px; margin: 4px 0; }
+.meta { color: #555; } .opis { color: #444; max-width: 780px; margin: 4px 0; }
 .broj { color: #888; font-weight: normal; font-size: 14px; }
-.upozorenje { background: #fff4e5; border: 1px solid #ffcc80; color: #8a5a00; padding: 8px 12px; border-radius: 6px; max-width: 720px; }
+.upozorenje { background: #fff4e5; border: 1px solid #ffcc80; color: #8a5a00; padding: 8px 12px; border-radius: 6px; max-width: 780px; }
+.info { background: #eef5fb; border: 1px solid #b6d4ea; color: #1a5276; padding: 8px 12px; border-radius: 6px; max-width: 780px; }
 .graf { width: 100%; max-width: 760px; height: auto; background: #fafafa; border: 1px solid #eee; }
 .mreza { stroke: #ddd; stroke-width: 1; } .osa { fill: #666; font-size: 11px; }
 .legenda-serije { display: flex; gap: 18px; flex-wrap: wrap; margin: 8px 0 4px; font-size: 13px; }
 .kvadrat { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
-table { border-collapse: collapse; font-size: 13px; }
+table { border-collapse: collapse; font-size: 12px; }
 th, td { border: 1px solid #ddd; padding: 4px 8px; text-align: right; }
 th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
-.legenda ul { list-style: none; padding: 0; max-width: 760px; }
-.legenda li { margin: 6px 0; }
+.legenda ul { list-style: none; padding: 0; max-width: 780px; } .legenda li { margin: 6px 0; }
 </style>
 </head>
 <body>
 <h1>Trend tehničkog duga — Compose lint okvir</h1>
-<p class="meta">Generisano: 2026-08-09 · Projekata: 1</p>
+<p class="meta">Generisano: 2026-08-20 · Projekata: 1</p>
+<p class="opis">Trojna metrika po pravilu: <b>ukupan</b> dug (sav zatečeni + novi), <b>zatečeni</b> (prihvaćen u baseline pri uvođenju) i <b>novi</b> (ukupan − zatečeni). Poenta: ukupan dug treba da <b>opada</b> kako se otplaćuje, a novi da <b>stoji na nuli</b> dok kapija radi — efekat kapije je nevidljiv ako se gleda samo ukupan dug.</p>
 <section class="projekat">
 <h2>Projekat: jetsnack <span class="broj">(1 mernih tačaka)</span></h2>
-<p class="upozorenje">⚠ Nedovoljno tačaka za trend (< 3). Prikazane vrednosti su tačke, ne pouzdan trend — potrebno je više mernih tačaka kroz vreme.</p>
-<h3>Normalizovani tehnički dug</h3>
+<p class="info">Baseline nije uveden — ceo dug je „nov” (zatečeno = 0). Uredan primer projekta bez uvedenog okvira.</p>
+<p class="upozorenje">⚠ Nedovoljno tačaka za trend (< 3). Prikazane vrednosti su tačke, ne pouzdan trend.</p>
+<h3>Ukupan i novi dug (normalizovano po KLOC)</h3>
+<p class="opis">Centralna slika: ukupan dug (opada dok se otplaćuje) i novi dug (stoji na nuli dok kapija ne pušta nove prekršaje).</p>
 <svg viewBox="0 0 760 320" role="img" class="graf">
 <line x1="56" y1="276.0" x2="740" y2="276.0" class="mreza"/>
 <text x="50" y="280.0" class="osa" text-anchor="end">0.00</text>
@@ -38,11 +41,10 @@ th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: l
 <text x="50" y="24.0" class="osa" text-anchor="end">6.51</text>
 <text x="398.0" y="294" class="osa" text-anchor="middle">2026-06-19</text>
 <circle cx="398.0" cy="20.0" r="3" fill="#8e44ad"/>
-<circle cx="398.0" cy="264.0109434078264" r="3" fill="#16a085"/>
+<circle cx="398.0" cy="20.0" r="3" fill="#c0392b"/>
 </svg>
-<div class="legenda-serije"><span><span class="kvadrat" style="background:#8e44ad"></span>Dug po KLOC</span><span><span class="kvadrat" style="background:#16a085"></span>Dug po @Composable</span></div>
-<h3>Razbijanje po pravilu (broj nalaza)</h3>
-<p class="opis">Agregat se nikad ne gleda sam — vidi se koje pravilo nosi dug.</p>
+<div class="legenda-serije"><span><span class="kvadrat" style="background:#8e44ad"></span>Ukupan dug / KLOC</span><span><span class="kvadrat" style="background:#c0392b"></span>Novi dug / KLOC</span></div>
+<h3>Razbijanje po pravilu (ukupan broj nalaza)</h3>
 <svg viewBox="0 0 760 320" role="img" class="graf">
 <line x1="56" y1="276.0" x2="740" y2="276.0" class="mreza"/>
 <text x="50" y="280.0" class="osa" text-anchor="end">0.00</text>
@@ -57,20 +59,21 @@ th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: l
 <circle cx="398.0" cy="259.48387096774195" r="3" fill="#27ae60"/>
 </svg>
 <div class="legenda-serije"><span><span class="kvadrat" style="background:#c0392b"></span>StanjeBezRemember</span><span><span class="kvadrat" style="background:#e67e22"></span>SkupaAlokacijaBezRemember</span><span><span class="kvadrat" style="background:#2980b9"></span>NestabilanTipParametra</span><span><span class="kvadrat" style="background:#27ae60"></span>HardkodovaniString</span></div>
-<h3>Sirovi brojevi</h3>
+<h3>Sirovi brojevi (po pravilu: ukupno / zatečeno / novo)</h3>
 <table>
-<thead><tr><th>Datum</th><th>Komit</th><th>KLOC</th><th>@Composable</th><th>StanjeBezRemember</th><th>SkupaAlokacijaBezRemember</th><th>NestabilanTipParametra</th><th>HardkodovaniString</th><th>Pond. zbir</th><th>Dug/KLOC</th><th>Dug/@Comp.</th><th>Tuđih</th></tr></thead>
+<thead><tr><th>Datum</th><th>Komit</th><th>KLOC</th><th>@Comp.</th><th>Baseline</th><th>StanjeBezRemember</th><th>SkupaAlokacijaBezRemember</th><th>NestabilanTipParametra</th><th>HardkodovaniString</th><th>Pond. zbir</th><th>Dug/KLOC</th><th>Dug/@Comp.</th><th>Tuđih</th></tr></thead>
 <tbody>
-<tr><td>2026-06-19</td><td>bc182640</td><td>6.98</td><td>149</td><td>0</td><td>0</td><td>31</td><td>2</td><td>45.40</td><td>6.51</td><td>0.30</td><td>47</td></tr>
+<tr><td>2026-06-19</td><td>bc182640</td><td>6.98</td><td>149</td><td>ne</td><td>0 / 0 / 0</td><td>0 / 0 / 0</td><td>31 / 0 / 31</td><td>2 / 0 / 2</td><td>45.40 / 0.00 / 45.40</td><td>6.51 / 0.00 / 6.51</td><td>0.30 / 0.00 / 0.30</td><td>47</td></tr>
 </tbody>
 </table>
+<p class="opis">Ćelije pravila i agregata: <b>ukupno / zatečeno / novi</b>.</p>
 </section>
 <section class="legenda">
 <h2>Šta koje pravilo znači</h2>
 <ul>
-<li><span class="kvadrat" style="background:#c0392b"></span><b>StanjeBezRemember</b> — Stanje van remember bloka — ERROR, korektnost (gubi se na rekompoziciju)</li>
+<li><span class="kvadrat" style="background:#c0392b"></span><b>StanjeBezRemember</b> — Stanje van remember bloka — ERROR, korektnost</li>
 <li><span class="kvadrat" style="background:#e67e22"></span><b>SkupaAlokacijaBezRemember</b> — Skupa alokacija bez remember — WARNING, performanse</li>
-<li><span class="kvadrat" style="background:#2980b9"></span><b>NestabilanTipParametra</b> — Nestabilan tip parametra — WARNING, performanse (obara skipping)</li>
+<li><span class="kvadrat" style="background:#2980b9"></span><b>NestabilanTipParametra</b> — Nestabilan tip parametra — WARNING, performanse</li>
 <li><span class="kvadrat" style="background:#27ae60"></span><b>HardkodovaniString</b> — Hardkodovan string u UI — WARNING, lokalizacija/proces</li>
 </ul>
 </section>
