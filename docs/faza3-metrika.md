@@ -63,6 +63,36 @@ PO PROJEKTU (vidi dole).
 ili nema `@Composable`), odnos je NULL — prazno polje u CSV-u, `null` u JSON-u.
 Odsustvo podatka nije „nula duga"; red ostaje, tačka se u grafiku preskače.
 
+## Trojna metrika (faza 3c) — zašto i šema
+
+Rad tvrdi **smanjenje** tehničkog duga. Metrika koja meri samo ukupan dug to ne
+može da pokaže: u projektu gde baseline radi posao, ukupan dug pada tek postepeno,
+a efekat kapije (da NE ulazi nov dug) je nevidljiv. Zato svaka merna tačka nosi
+**tri broja po pravilu**:
+
+- **ukupno** — svi nalazi (lint pušten BEZ baseline-a);
+- **zatečeno** — broj stavki u `lint-baseline.xml` za to pravilo (baseline se
+  parsira POSTOJEĆIM parserom — isti `<issues>` format, nalaz 3b);
+- **novo** — `ukupno − zatečeno`, clampovano na 0. Ako bi bilo negativno, to
+  znači da je dug otplaćen a baseline nije osvežen (`baseline_zastario`) — korisna
+  informacija, ne greška, i signalizuje se upozorenjem.
+
+Ako baseline fajl ne postoji: `zatečeno = 0`, `novo = ukupno`,
+`baseline_prisutan = false`.
+
+**Proširena šema (ne ruši identitetske kolone).** Zadržane su
+`projekat, commit_hash, datum, kloc, broj_composable, ukupno_tudjih_upozorenja`;
+dodato je `baseline_prisutan` i **po tri kolone** za svaku metriku:
+
+- po pravilu: `<Pravilo>_ukupno`, `<Pravilo>_zateceno`, `<Pravilo>_novo` (×4 pravila);
+- agregat: `ponderisani_zbir_{ukupno,zateceno,novo}`;
+- normalizovano: `dug_po_kloc_{ukupno,zateceno,novo}` i
+  `dug_po_composable_{ukupno,zateceno,novo}`.
+
+JSON red nosi isti sadržaj, sa `po_pravilu` kao ugnežden objekat
+(`{"ukupno":…,"zateceno":…,"novo":…}` po pravilu) i agregatima kao trojkama
+(ili `null` kad je normalizacija prazna).
+
 ## Trend izveštaj
 
 Samostalan HTML (inline SVG, bez CDN-a, radi offline iz CI artefakta). **Po
@@ -70,8 +100,11 @@ projektu:** svaki projekat dobija svoju sekciju (svoji grafikoni, tabela,
 legenda) — projekti se NIKAD ne spajaju u jednu liniju. Ako projekat ima < 3
 merne tačke, iznad grafika stoji upozorenje „nedovoljno tačaka za trend". Prazne
 vrednosti (deljenje nulom) se u grafiku preskaču (prekid linije). Po projektu:
-grafikon obe normalizovane metrike, ISPOD njega obavezno razbijanje po pravilu
-(agregat se nikad ne prikazuje sam), tabela, legenda. Namenjeno menadžmentu.
+**primarni grafikon prikazuje UKUPAN i NOVI dug** (normalizovano po KLOC) kao dve
+serije — centralna slika rada: ukupan opada dok se dug otplaćuje, novi stoji na
+nuli dok kapija radi. ISPOD je razbijanje po pravilu (agregat se nikad ne
+prikazuje sam), a zatečeni se vidi u tabeli (po pravilu: ukupno / zatečeno /
+novo). Namenjeno menadžmentu.
 
 ## Rešena pitanja (ratifikovano u chatu — odluke 10–12 u CLAUDE.md)
 

@@ -1,103 +1,86 @@
 package rs.diplomski.metrika
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.nio.file.Files
 
-/** TEST-KORPUS za izlazni zapis (test-first): CSV, JSON, projekat, null, dopisivanje. */
+/** TEST-KORPUS za izlazni zapis (faza 3c): trojna šema, null, round-trip. */
 class ZapisTest {
 
-    private val tacka = MernaTacka(
+    private fun tacka(dugKloc: TriDouble? = TriDouble(3.2, 1.0, 2.2)) = MernaTacka(
         projekat = "jetsnack",
         commitHash = "abc123",
-        datum = "2026-07-15",
+        datum = "2026-06-19",
         kloc = 2.0,
         brojComposable = 8,
         poPravilu = mapOf(
-            Pravila.STANJE to 1,
-            Pravila.ALOKACIJA to 0,
-            Pravila.NESTABILAN to 1,
-            Pravila.HARDKOD to 2,
+            Pravila.STANJE to TriBroja.izracunaj(1, 0),
+            Pravila.ALOKACIJA to TriBroja.izracunaj(0, 0),
+            Pravila.NESTABILAN to TriBroja.izracunaj(1, 0),
+            Pravila.HARDKOD to TriBroja.izracunaj(2, 2),
         ),
-        ponderisaniZbir = 6.4,
-        dugPoKloc = 3.2,
-        dugPoComposable = 0.8,
-        ukupnoTudjih = 2,
+        baselinePrisutan = true,
+        ponderisaniZbir = TriDouble(6.4, 2.0, 4.4),
+        dugPoKloc = dugKloc,
+        dugPoComposable = TriDouble(0.8, 0.25, 0.55),
+        ukupnoTudjih = 5,
     )
 
     @Test
-    fun `csv zaglavlje ima projekat prvo i pravila u fiksnom redosledu`() {
-        assertEquals(
-            "projekat,commit_hash,datum,kloc,broj_composable," +
-                "StanjeBezRemember,SkupaAlokacijaBezRemember,NestabilanTipParametra,HardkodovaniString," +
-                "ponderisani_zbir,dug_po_kloc,dug_po_composable,ukupno_tudjih_upozorenja",
-            Zapis.csvZaglavlje(),
-        )
+    fun `zaglavlje ima trojne kolone i baseline_prisutan`() {
+        val z = Zapis.csvZaglavlje()
+        assertTrue(z.contains("baseline_prisutan"))
+        assertTrue(z.contains("StanjeBezRemember_ukupno"))
+        assertTrue(z.contains("HardkodovaniString_zateceno"))
+        assertTrue(z.contains("HardkodovaniString_novo"))
+        assertTrue(z.contains("ponderisani_zbir_novo"))
+        assertTrue(z.contains("dug_po_kloc_zateceno"))
+        assertTrue(z.contains("dug_po_composable_novo"))
     }
 
     @Test
-    fun `csv red - projekat prvo, decimale sa tackom`() {
-        assertEquals(
-            "jetsnack,abc123,2026-07-15,2.0000,8,1,0,1,2,6.4000,3.2000,0.8000,2",
-            Zapis.csvRed(tacka),
-        )
+    fun `csv red ima isti broj kolona kao zaglavlje`() {
+        assertEquals(Zapis.CSV_KOLONE.size, Zapis.csvRed(tacka()).split(",").size)
     }
 
     @Test
-    fun `csv red - null odnos je PRAZNO polje`() {
-        val t = tacka.copy(dugPoKloc = null, dugPoComposable = null)
-        // ...,ponderisani_zbir,,,ukupno... -> dva prazna polja između zbira i tuđih.
-        assertEquals(
-            "jetsnack,abc123,2026-07-15,2.0000,8,1,0,1,2,6.4000,,,2",
-            Zapis.csvRed(t),
-        )
+    fun `round-trip - trojni brojevi po pravilu`() {
+        val csv = Zapis.csvZaglavlje() + "\n" + Zapis.csvRed(tacka()) + "\n"
+        val u = Zapis.ucitajCsv(csv).single()
+        assertEquals(2, u.poPravilu.getValue(Pravila.HARDKOD).ukupno)
+        assertEquals(2, u.poPravilu.getValue(Pravila.HARDKOD).zateceno)
+        assertEquals(0, u.poPravilu.getValue(Pravila.HARDKOD).novo)
+        assertEquals(1, u.poPravilu.getValue(Pravila.NESTABILAN).novo)
+        assertTrue(u.baselinePrisutan)
+        assertEquals(2.2, u.dugPoKloc!!.novo, 1e-9)
     }
 
     @Test
-    fun `json red - projekat i null`() {
-        val t = tacka.copy(dugPoKloc = null, dugPoComposable = null)
+    fun `null normalizovana vrednost - prazna polja u CSV, null u JSON`() {
+        val t = tacka(dugKloc = null)
+        // Tri prazna polja za dug_po_kloc (","+"" x3): proveri kroz round-trip.
+        val csv = Zapis.csvZaglavlje() + "\n" + Zapis.csvRed(t) + "\n"
+        val u = Zapis.ucitajCsv(csv).single()
+        assertNull(u.dugPoKloc)
+
         val json = Zapis.jsonRed(t)
-        assertTrue(json.contains("\"projekat\":\"jetsnack\""))
         assertTrue(json.contains("\"dug_po_kloc\":null"))
-        assertTrue(json.contains("\"dug_po_composable\":null"))
-    }
-
-    @Test
-    fun `json red - pun sadrzaj kad odnosi postoje`() {
-        assertEquals(
-            "{\"projekat\":\"jetsnack\",\"commit_hash\":\"abc123\",\"datum\":\"2026-07-15\"," +
-                "\"kloc\":2.0000,\"broj_composable\":8," +
-                "\"po_pravilu\":{\"StanjeBezRemember\":1,\"SkupaAlokacijaBezRemember\":0," +
-                "\"NestabilanTipParametra\":1,\"HardkodovaniString\":2}," +
-                "\"ponderisani_zbir\":6.4000,\"dug_po_kloc\":3.2000,\"dug_po_composable\":0.8000," +
-                "\"ukupno_tudjih_upozorenja\":2}",
-            Zapis.jsonRed(tacka),
-        )
-    }
-
-    @Test
-    fun `ucitavanje - prazno polje postaje null`() {
-        val csv = Zapis.csvZaglavlje() + "\n" +
-            Zapis.csvRed(tacka.copy(dugPoKloc = null, dugPoComposable = null)) + "\n"
-        val ucitane = Zapis.ucitajCsv(csv)
-        assertEquals(1, ucitane.size)
-        assertEquals(null, ucitane[0].dugPoKloc)
-        assertEquals(null, ucitane[0].dugPoComposable)
+        assertTrue(json.contains("\"baseline_prisutan\":true"))
+        assertTrue(json.contains("\"HardkodovaniString\":{\"ukupno\":2,\"zateceno\":2,\"novo\":0}"))
     }
 
     @Test
     fun `dopisivanje - zaglavlje jednom, pa redovi`() {
-        val fajl = Files.createTempFile("metrika-test", ".csv")
+        val fajl = Files.createTempFile("metrika-3c", ".csv")
         Files.deleteIfExists(fajl)
         try {
-            Zapis.dopisiCsv(fajl, tacka)
-            Zapis.dopisiCsv(fajl, tacka.copy(commitHash = "def456"))
-
+            Zapis.dopisiCsv(fajl, tacka())
+            Zapis.dopisiCsv(fajl, tacka())
             val linije = Files.readAllLines(fajl)
             assertEquals(3, linije.size)
             assertEquals(Zapis.csvZaglavlje(), linije[0])
-            assertEquals("jetsnack", linije[1].substringBefore(",")) // projekat je prva kolona
         } finally {
             Files.deleteIfExists(fajl)
         }

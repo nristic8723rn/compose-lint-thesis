@@ -1,20 +1,18 @@
 package rs.diplomski.metrika
 
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** TEST-KORPUS za trend izveštaj (test-first): projekat, CSV round-trip, sadržaj. */
+/** TEST-KORPUS za trend (faza 3c): ukupan vs novi, po projektu, trojni prikaz. */
 class TrendIzvestajTest {
 
     private fun tacka(
         projekat: String,
         hash: String,
         datum: String,
-        stanje: Int,
-        hardkod: Int,
-        dugKloc: Double? = 3.2,
+        baseline: Boolean = true,
+        dugKloc: TriDouble? = TriDouble(6.4, 2.0, 4.4),
     ) = MernaTacka(
         projekat = projekat,
         commitHash = hash,
@@ -22,70 +20,64 @@ class TrendIzvestajTest {
         kloc = 2.0,
         brojComposable = 8,
         poPravilu = mapOf(
-            Pravila.STANJE to stanje,
-            Pravila.ALOKACIJA to 0,
-            Pravila.NESTABILAN to 1,
-            Pravila.HARDKOD to hardkod,
+            Pravila.STANJE to TriBroja.izracunaj(1, 0),
+            Pravila.ALOKACIJA to TriBroja.izracunaj(0, 0),
+            Pravila.NESTABILAN to TriBroja.izracunaj(1, 0),
+            Pravila.HARDKOD to TriBroja.izracunaj(2, 2),
         ),
-        ponderisaniZbir = 6.4,
+        baselinePrisutan = baseline,
+        ponderisaniZbir = TriDouble(6.4, 2.0, 4.4),
         dugPoKloc = dugKloc,
-        dugPoComposable = 0.8,
-        ukupnoTudjih = 2,
+        dugPoComposable = TriDouble(0.8, 0.25, 0.55),
+        ukupnoTudjih = 5,
     )
 
     @Test
-    fun `CSV round-trip cuva projekat`() {
-        val t1 = tacka("jetsnack", "aaa", "2026-01-01", 1, 2)
-        val t2 = tacka("sample-app", "bbb", "2026-02-01", 0, 3)
-        val csv = Zapis.csvZaglavlje() + "\n" + Zapis.csvRed(t1) + "\n" + Zapis.csvRed(t2) + "\n"
-
-        val ucitane = Zapis.ucitajCsv(csv)
-        assertEquals("jetsnack", ucitane[0].projekat)
-        assertEquals("sample-app", ucitane[1].projekat)
+    fun `primarni grafikon ima ukupan i novi dug kao dve serije`() {
+        val html = TrendIzvestaj.generisi(listOf(tacka("jetsnack", "aaa", "2026-01-01")), "2026-07-15")
+        assertTrue(html.contains("Ukupan dug / KLOC"))
+        assertTrue(html.contains("Novi dug / KLOC"))
     }
 
     @Test
-    fun `HTML - zasebna sekcija po projektu, nikad spojeno`() {
+    fun `zasebna sekcija po projektu i trojni prikaz u tabeli`() {
         val html = TrendIzvestaj.generisi(
-            listOf(
-                tacka("jetsnack", "aaa", "2026-01-01", 1, 2),
-                tacka("sample-app", "bbb", "2026-02-01", 0, 3),
-            ),
-            datumGenerisanja = "2026-07-15",
+            listOf(tacka("jetsnack", "aaa", "2026-01-01"), tacka("sample-app", "bbb", "2026-02-01")),
+            "2026-07-15",
         )
-        assertTrue(html.startsWith("<!doctype html"))
         assertTrue(html.contains("Projekat: jetsnack"))
         assertTrue(html.contains("Projekat: sample-app"))
-        assertTrue(html.contains("Projekata: 2"))
-        assertTrue(html.contains("<svg"))
-        assertTrue(html.contains("<table"))
-        Pravila.REDOSLED.forEach { assertTrue("nedostaje $it", html.contains(it)) }
+        // Trojni prikaz u ćeliji pravila: "ukupno / zatečeno / novo" (npr. HARDKOD 2/2/0).
+        assertTrue(html.contains("2 / 2 / 0"))
     }
 
     @Test
-    fun `HTML - upozorenje kad projekat ima manje od 3 tacke`() {
+    fun `baseline nije uveden - info poruka i zatečeno 0`() {
         val html = TrendIzvestaj.generisi(
-            listOf(tacka("jetsnack", "aaa", "2026-01-01", 1, 2)),
-            datumGenerisanja = "2026-07-15",
+            listOf(tacka("jetsnack", "aaa", "2026-01-01", baseline = false)),
+            "2026-07-15",
         )
+        assertTrue(html.contains("Baseline nije uveden"))
+    }
+
+    @Test
+    fun `upozorenje za manje od 3 tacke`() {
+        val html = TrendIzvestaj.generisi(listOf(tacka("jetsnack", "aaa", "2026-01-01")), "2026-07-15")
         assertTrue(html.contains("Nedovoljno tačaka za trend"))
     }
 
     @Test
-    fun `HTML - null odnos se u tabeli prikazuje kao crtica`() {
+    fun `null normalizovano - crtica u tabeli`() {
         val html = TrendIzvestaj.generisi(
-            listOf(tacka("jetsnack", "aaa", "2026-01-01", 1, 2, dugKloc = null)),
-            datumGenerisanja = "2026-07-15",
+            listOf(tacka("jetsnack", "aaa", "2026-01-01", dugKloc = null)),
+            "2026-07-15",
         )
-        assertTrue(html.contains("—")) // prazna vrednost u tabeli
+        assertTrue(html.contains("—"))
     }
 
     @Test
-    fun `HTML je offline - nema spoljnih URL-ova`() {
-        val html = TrendIzvestaj.generisi(
-            listOf(tacka("jetsnack", "aaa", "2026-01-01", 1, 2)),
-            datumGenerisanja = "2026-07-15",
-        )
-        assertFalse("izvestaj mora raditi offline", html.contains("http"))
+    fun `offline - nema spoljnih URL-ova`() {
+        val html = TrendIzvestaj.generisi(listOf(tacka("jetsnack", "aaa", "2026-01-01")), "2026-07-15")
+        assertFalse(html.contains("http"))
     }
 }

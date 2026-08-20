@@ -1,56 +1,53 @@
 package rs.diplomski.metrika
 
 /**
- * Agregatna (izračunata) metrika tehničkog duga za jednu mernu tačku.
- *  - ponderisaniZbir = Σ (broj_nalaza[pravilo] × ponder[pravilo])
- *  - dugPoKloc        = ponderisaniZbir / KLOC
- *  - dugPoComposable  = ponderisaniZbir / broj @Composable
+ * Računanje agregata (faza 3c — trojna metrika). Bez I/O.
+ *
+ * Za svako pravilo vodimo TRI broja (ukupno/zatečeno/novo) i za svaki od njih
+ * računamo ponderisani zbir i normalizovane vrednosti. Time metrika može da
+ * pokaže SMANJENJE duga (ukupan pada) i efekat kapije (novi stoji na nuli).
  */
-data class Agregat(
-    val ponderisaniZbir: Double,
-    // null (ne 0.0) kad je delilac 0 — odsustvo podatka, ne „nula duga".
-    // Tačka se u grafikonu preskače (prekid linije), red ostaje.
-    val dugPoKloc: Double?,
-    val dugPoComposable: Double?,
-)
-
 object Metrika {
 
-    /**
-     * Čist izračun agregata (bez I/O).
-     *
-     * ODLUKA (faza 3b): ako merna tačka nema .kt fajlova (kloc = 0) ili nema
-     * @Composable (0), delilac je 0 pa je odnos NULL (prazno), ne 0.0 — odsustvo
-     * podatka nije „nula duga". U CSV-u prazno polje, u JSON-u null, u grafikonu
-     * prekid linije.
-     */
-    fun agregiraj(
-        poPravilu: Map<String, Int>,
-        ponderi: Map<String, Ponder>,
-        kloc: Double,
-        brojComposable: Int,
-    ): Agregat {
-        val zbir = poPravilu.entries.sumOf { (id, broj) ->
-            broj * (ponderi[id]?.vrednost ?: 0.0)
-        }
-        return Agregat(
-            ponderisaniZbir = zbir,
-            dugPoKloc = if (kloc > 0.0) zbir / kloc else null,
-            dugPoComposable = if (brojComposable > 0) zbir / brojComposable else null,
-        )
-    }
+    /** Ponderisani zbir za dati skup brojeva po pravilu. */
+    fun ponderisaniZbir(poPravilu: Map<String, Int>, ponderi: Map<String, Ponder>): Double =
+        poPravilu.entries.sumOf { (id, broj) -> broj * (ponderi[id]?.vrednost ?: 0.0) }
 
-    /** Sastavi jednu mernu tačku iz parsiranog izveštaja + normalizacije. */
+    /**
+     * Sastavi mernu tačku iz UKUPNOG izveštaja (lint bez baseline-a) i,
+     * opciono, baseline izveštaja (zatečeno). Ako baseline nije prosleđen:
+     * zatečeno = 0, novo = ukupno, [MernaTacka.baselinePrisutan] = false.
+     *
+     * Deljenje nulom (kloc=0 ili @Composable=0) → normalizovana vrednost je
+     * null (prazno), ne 0 — odsustvo podatka nije „nula duga" (odluka 10).
+     */
     fun mernaTacka(
         projekat: String,
         commitHash: String,
         datum: String,
-        izvestaj: ParsiranIzvestaj,
+        ukupanIzvestaj: ParsiranIzvestaj,
+        baseline: ParsiranIzvestaj?,
         norm: Normalizacija,
         ponderi: Map<String, Ponder>,
     ): MernaTacka {
-        val poPravilu = izvestaj.poPravilu()
-        val a = agregiraj(poPravilu, ponderi, norm.kloc, norm.brojComposable)
+        val ukupnoMap = ukupanIzvestaj.poPravilu()
+        val zatecenoMap = baseline?.poPravilu() ?: Pravila.REDOSLED.associateWith { 0 }
+        val poPravilu = Pravila.REDOSLED.associateWith { id ->
+            TriBroja.izracunaj(ukupnoMap.getValue(id), zatecenoMap.getValue(id))
+        }
+
+        val zbirU = ponderisaniZbir(poPravilu.mapValues { it.value.ukupno }, ponderi)
+        val zbirZ = ponderisaniZbir(poPravilu.mapValues { it.value.zateceno }, ponderi)
+        val zbirN = ponderisaniZbir(poPravilu.mapValues { it.value.novo }, ponderi)
+
+        val poKloc = if (norm.kloc > 0.0) {
+            TriDouble(zbirU / norm.kloc, zbirZ / norm.kloc, zbirN / norm.kloc)
+        } else null
+        val poComposable = if (norm.brojComposable > 0) {
+            val n = norm.brojComposable.toDouble()
+            TriDouble(zbirU / n, zbirZ / n, zbirN / n)
+        } else null
+
         return MernaTacka(
             projekat = projekat,
             commitHash = commitHash,
@@ -58,10 +55,11 @@ object Metrika {
             kloc = norm.kloc,
             brojComposable = norm.brojComposable,
             poPravilu = poPravilu,
-            ponderisaniZbir = a.ponderisaniZbir,
-            dugPoKloc = a.dugPoKloc,
-            dugPoComposable = a.dugPoComposable,
-            ukupnoTudjih = izvestaj.ukupnoTudjih,
+            baselinePrisutan = baseline != null,
+            ponderisaniZbir = TriDouble(zbirU, zbirZ, zbirN),
+            dugPoKloc = poKloc,
+            dugPoComposable = poComposable,
+            ukupnoTudjih = ukupanIzvestaj.ukupnoTudjih,
         )
     }
 }

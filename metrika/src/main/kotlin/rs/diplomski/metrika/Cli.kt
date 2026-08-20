@@ -43,9 +43,12 @@ private fun komandaIzvestaj(z: Map<String, String>) {
     val ponderi = z["--ponderi"]?.let { Ponderi.izTeksta(Files.readString(Path.of(it))) }
         ?: Ponderi.PODRAZUMEVANI
 
-    val izvestaj = LintParser.parsiraj(xml)
+    val ukupanIzvestaj = LintParser.parsiraj(xml)
+    // Baseline (opciono) se parsira ISTIM parserom (isti <issues> format, nalaz 3b).
+    // Ako se ne prosledi: zatečeno=0, novo=ukupno, baseline_prisutan=false.
+    val baseline = z["--baseline"]?.let { LintParser.parsiraj(Files.readString(Path.of(it))) }
     val norm = Normalizatori.izbrojNad(koren)
-    val tacka = Metrika.mernaTacka(projekat, commit, datum, izvestaj, norm, ponderi)
+    val tacka = Metrika.mernaTacka(projekat, commit, datum, ukupanIzvestaj, baseline, norm, ponderi)
 
     Zapis.dopisiCsv(putanja(z, "--csv"), tacka)
     z["--json"]?.let { staza ->
@@ -59,13 +62,18 @@ private fun komandaIzvestaj(z: Map<String, String>) {
         )
     }
 
-    println("Merna tačka upisana (commit=$commit):")
+    fun f2(x: Double) = "%.2f".format(java.util.Locale.ROOT, x)
+    println("Merna tačka upisana (projekat=$projekat, commit=$commit, baseline=${tacka.baselinePrisutan}):")
     println("  KLOC=${"%.3f".format(java.util.Locale.ROOT, norm.kloc)} @Composable=${norm.brojComposable}")
-    println("  po pravilu: " + Pravila.REDOSLED.joinToString(", ") { "$it=${tacka.poPravilu[it]}" })
-    println("  ponderisani_zbir=${"%.2f".format(java.util.Locale.ROOT, tacka.ponderisaniZbir)}" +
-        " dug/KLOC=${"%.2f".format(java.util.Locale.ROOT, tacka.dugPoKloc)}" +
-        " dug/@Composable=${"%.2f".format(java.util.Locale.ROOT, tacka.dugPoComposable)}")
+    println("  po pravilu (ukupno/zatečeno/novo): " + Pravila.REDOSLED.joinToString(", ") {
+        val tb = tacka.poPravilu.getValue(it); "$it=${tb.ukupno}/${tb.zateceno}/${tb.novo}"
+    })
+    val pz = tacka.ponderisaniZbir
+    println("  ponderisani_zbir U/Z/N=${f2(pz.ukupno)}/${f2(pz.zateceno)}/${f2(pz.novo)}")
     println("  tuđih upozorenja (kontekst): ${tacka.ukupnoTudjih}")
+    if (tacka.baselineZastario()) {
+        System.err.println("  UPOZORENJE: baseline zastareo (zatečeno > ukupno za neko pravilo) — osvežiti baseline.")
+    }
 }
 
 private fun komandaTrend(z: Map<String, String>) {
@@ -106,11 +114,15 @@ private fun pomoc() {
         metrika — metrički sloj (faza 3)
 
         Komande:
-          izvestaj --projekat <naziv> --xml <lint.xml> --izvor <koren> --commit <hash>
+          izvestaj --projekat <naziv> --xml <lint.xml BEZ baseline-a> --izvor <koren>
+                   --commit <hash> [--baseline <lint-baseline.xml>]
                    [--datum yyyy-MM-dd] [--ponderi <config>] --csv <out.csv> [--json <out.jsonl>]
           trend    --csv <in.csv> --html <out.html> [--projekat <naziv>]
 
         Napomene:
+          --xml je UKUPAN izveštaj (lint pušten BEZ baseline-a) -> ukupno.
+          --baseline je lint-baseline.xml (isti <issues> format) -> zatečeno;
+                   novo = ukupno - zatečeno. Bez njega: zatečeno=0, novo=ukupno.
           --datum je AUTHOR DATE komita; poziva ga prosleđuje iz gita
                    (npr. `git show -s --format=%ad --date=short <hash>`).
                    Ako se izostavi, uzima se DANAŠNJI datum — samo za ručno
