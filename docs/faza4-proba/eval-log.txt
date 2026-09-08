@@ -1,0 +1,499 @@
+START Tue Sep  8 19:45:46 CEDT 2026 | tacaka za obradu: 1
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+Merna ta?ka upisana (projekat=feeder, commit=7e094471ceef0ffd35a5c13857d7e9823fba3afd, baseline=false):
+  KLOC=34.218 @Composable=353
+  po pravilu (ukupno/zate?eno/novo): StanjeBezRemember=0/0/0, SkupaAlokacijaBezRemember=0/0/0, NestabilanTipParametra=1/0/1, HardkodovaniString=7/0/7
+  ponderisani_zbir U/Z/N=8.40/0.00/8.40
+  tu?ih upozorenja (kontekst): 140
+2024-08-01 7e094471ceef0ffd35a5c13857d7e9823fba3afd (2024-08-05): OK
+GOTOVO ok=1 fail=0 Tue Sep  8 19:49:48 CEDT 2026
+START Tue Sep  8 19:50:02 CEDT 2026 | tacaka za obradu: 1
+Merna ta?ka upisana (projekat=feeder, commit=749fd4fd1d7d7ae3437b4a1e540643145dfb3056, baseline=false):
+  KLOC=35.714 @Composable=367
+  po pravilu (ukupno/zate?eno/novo): StanjeBezRemember=0/0/0, SkupaAlokacijaBezRemember=0/0/0, NestabilanTipParametra=1/0/1, HardkodovaniString=8/0/8
+  ponderisani_zbir U/Z/N=9.40/0.00/9.40
+  tu?ih upozorenja (kontekst): 330
+2025-02-01 749fd4fd1d7d7ae3437b4a1e540643145dfb3056 (2025-01-31): OK
+GOTOVO ok=1 fail=0 Tue Sep  8 20:03:48 CEDT 2026
+START Tue Sep  8 20:04:04 CEDT 2026 | tacaka za obradu: 1
+Merna ta?ka upisana (projekat=feeder, commit=c5366d8800ada402c5e8278b980179e471c0d82a, baseline=false):
+  KLOC=37.886 @Composable=379
+  po pravilu (ukupno/zate?eno/novo): StanjeBezRemember=0/0/0, SkupaAlokacijaBezRemember=0/0/0, NestabilanTipParametra=10/0/10, HardkodovaniString=17/0/17
+  ponderisani_zbir U/Z/N=31.00/0.00/31.00
+  tu?ih upozorenja (kontekst): 325
+2025-05-01 c5366d8800ada402c5e8278b980179e471c0d82a (2025-04-28): OK
+GOTOVO ok=1 fail=0 Tue Sep  8 20:19:40 CEDT 2026
+START Tue Sep  8 20:20:02 CEDT 2026 | tacaka za obradu: 1
+
+FAILURE: Build completed with 3 failures.
+
+1: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:lintAnalyzeFdroidDebugUnitTest'.
+> java.nio.file.FileSystemException: C:\Users\Nikola\AndroidStudioProjects\4a-extern\Feeder\app\build\intermediates\lint-cache\lintAnalyzeFdroidDebugUnitTest\migrated-jars\androidx.compose.runtime.lint.RuntimeIssueRegistry-398cfe4c3e0a311f..jar: The process cannot access the file because it is being used by another process
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+2: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:lintAnalyzeFdroidDebug'.
+> java.nio.file.FileSystemException: C:\Users\Nikola\AndroidStudioProjects\4a-extern\Feeder\app\build\intermediates\lint-cache\lintAnalyzeFdroidDebug\migrated-jars\androidx.compose.runtime.lint.RuntimeIssueRegistry-398cfe4c3e0a311f..jar: The process cannot access the file because it is being used by another process
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+3: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:lintAnalyzeFdroidDebugAndroidTest'.
+> java.nio.file.FileSystemException: C:\Users\Nikola\AndroidStudioProjects\4a-extern\Feeder\app\build\intermediates\lint-cache\lintAnalyzeFdroidDebugAndroidTest\migrated-jars\androidx.navigation.compose.lint.NavigationComposeIssueRegistry-598b224f0ce2f9f2..jar: The process cannot access the file because it is being used by another process
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+BUILD FAILED in 8m 22s
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Cannot locate tasks that match ':app:lintDebug' as task 'lintDebug' is ambiguous in project ':app'. Candidates are: 'lintAnalyzeFdroidDebug', 'lintAnalyzeFdroidDebugAndroidTest', 'lintAnalyzeFdroidDebugUnitTest', 'lintFdroidDebug', 'lintFixFdroidDebug', 'lintReportFdroidDebug'.
+
+* Try:
+> Run gradlew tasks to get a list of available tasks.
+> For more on name expansion, please refer to https://docs.gradle.org/8.14.3/userguide/command_line_interface.html#sec:name_abbreviation in the Gradle documentation.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 20s
+2025-08-01 0b63187eb6bcdf0c17d54a52813a918b57cc72b1 (2025-07-31): BUILD/LINT FAIL
+GOTOVO ok=0 fail=1 Tue Sep  8 20:28:50 CEDT 2026
+START Tue Sep  8 20:29:02 CEDT 2026 | tacaka za obradu: 1
+e: Daemon compilation failed: Connection to the Kotlin daemon has been unexpectedly lost. This might be caused by the daemon being killed by another process or the operating system, or by JVM crash.
+org.jetbrains.kotlin.gradle.tasks.DaemonCrashedException: Connection to the Kotlin daemon has been unexpectedly lost. This might be caused by the daemon being killed by another process or the operating system, or by JVM crash.
+	at org.jetbrains.kotlin.gradle.tasks.TasksUtilsKt.wrapCompilationExceptionIfNeeded(tasksUtils.kt:54)
+	at org.jetbrains.kotlin.gradle.tasks.TasksUtilsKt.wrapAndRethrowCompilationException(tasksUtils.kt:65)
+	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.compileWithDaemon(GradleKotlinCompilerWork.kt:243)
+	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.compileWithDaemonOrFallbackImpl(GradleKotlinCompilerWork.kt:159)
+	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.run(GradleKotlinCompilerWork.kt:111)
+	at org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction.execute(GradleCompilerRunnerWithWorkers.kt:74)
+	at org.gradle.workers.internal.DefaultWorkerServer.execute(DefaultWorkerServer.java:68)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:66)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1$1.create(NoIsolationWorkerFactory.java:62)
+	at org.gradle.internal.classloader.ClassLoaderUtils.executeInClassloader(ClassLoaderUtils.java:100)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.lambda$execute$0(NoIsolationWorkerFactory.java:62)
+	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:44)
+	at org.gradle.workers.internal.AbstractWorker$1.call(AbstractWorker.java:41)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:209)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(DefaultBuildOperationRunner.java:204)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:66)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:166)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.execute(DefaultBuildOperationRunner.java:59)
+	at org.gradle.internal.operations.DefaultBuildOperationRunner.call(DefaultBuildOperationRunner.java:53)
+	at org.gradle.workers.internal.AbstractWorker.executeWrappedInBuildOperation(AbstractWorker.java:41)
+	at org.gradle.workers.internal.NoIsolationWorkerFactory$1.execute(NoIsolationWorkerFactory.java:59)
+	at org.gradle.workers.internal.DefaultWorkerExecutor.lambda$submitWork$0(DefaultWorkerExecutor.java:176)
+	at java.base/java.util.concurrent.FutureTask.run(Unknown Source)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runExecution(DefaultConditionalExecutionQueue.java:194)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.access$700(DefaultConditionalExecutionQueue.java:127)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner$1.run(DefaultConditionalExecutionQueue.java:169)
+	at org.gradle.internal.Factories$1.create(Factories.java:31)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.withLocks(DefaultWorkerLeaseService.java:263)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:127)
+	at org.gradle.internal.work.DefaultWorkerLeaseService.runAsWorkerThread(DefaultWorkerLeaseService.java:132)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.runBatch(DefaultConditionalExecutionQueue.java:164)
+	at org.gradle.internal.work.DefaultConditionalExecutionQueue$ExecutionRunner.run(DefaultConditionalExecutionQueue.java:133)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.base/java.util.concurrent.FutureTask.run(Unknown Source)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: java.rmi.UnmarshalException: Error unmarshaling return header; nested exception is: 
+	java.net.SocketException: Connection reset
+	at java.rmi/sun.rmi.transport.StreamRemoteCall.executeCall(Unknown Source)
+	at java.rmi/sun.rmi.server.UnicastRef.invoke(Unknown Source)
+	at java.rmi/java.rmi.server.RemoteObjectInvocationHandler.invokeRemoteMethod(Unknown Source)
+	at java.rmi/java.rmi.server.RemoteObjectInvocationHandler.invoke(Unknown Source)
+	at jdk.proxy4/jdk.proxy4.$Proxy177.compile(Unknown Source)
+	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.incrementalCompilationWithDaemon(GradleKotlinCompilerWork.kt:328)
+	at org.jetbrains.kotlin.compilerRunner.GradleKotlinCompilerWork.compileWithDaemon(GradleKotlinCompilerWork.kt:235)
+	... 37 more
+Caused by: java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(Unknown Source)
+	at java.base/sun.nio.ch.NioSocketImpl.read(Unknown Source)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(Unknown Source)
+	at java.base/java.net.Socket$SocketInputStream.read(Unknown Source)
+	at java.base/java.io.BufferedInputStream.fill(Unknown Source)
+	at java.base/java.io.BufferedInputStream.implRead(Unknown Source)
+	at java.base/java.io.BufferedInputStream.read(Unknown Source)
+	at java.base/java.io.DataInputStream.readUnsignedByte(Unknown Source)
+	at java.base/java.io.DataInputStream.readByte(Unknown Source)
+	... 44 more
+
+exception: app\src\main\java\com\nononsenseapps\feeder\archmodel\SettingsStore.kt:669:5: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+exception: - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+exception: - To keep applying to the value parameter only, use the '@param:' annotation target.
+exception: 
+exception: see https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+exception:     @StringRes val stringId: Int,
+exception:     ^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\archmodel\SettingsStore.kt:678:5: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+exception: - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+exception: - To keep applying to the value parameter only, use the '@param:' annotation target.
+exception: 
+exception: see https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+exception:     @StringRes val stringId: Int,
+exception:     ^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\archmodel\SettingsStore.kt:685:5: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+exception: - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+exception: - To keep applying to the value parameter only, use the '@param:' annotation target.
+exception: 
+exception: see https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+exception:     @StringRes val stringId: Int,
+exception:     ^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\archmodel\SettingsStore.kt:692:5: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+exception: - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+exception: - To keep applying to the value parameter only, use the '@param:' annotation target.
+exception: 
+exception: see https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+exception:     @StringRes val stringId: Int,
+exception:     ^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\archmodel\SettingsStore.kt:700:5: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+exception: - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+exception: - To keep applying to the value parameter only, use the '@param:' annotation target.
+exception: 
+exception: see https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+exception:     @StringRes val stringId: Int,
+exception:     ^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\archmodel\SettingsStore.kt:708:5: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+exception: - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+exception: - To keep applying to the value parameter only, use the '@param:' annotation target.
+exception: 
+exception: see https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+exception:     @StringRes val stringId: Int,
+exception:     ^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\archmodel\SettingsStore.kt:721:5: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+exception: - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+exception: - To keep applying to the value parameter only, use the '@param:' annotation target.
+exception: 
+exception: see https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+exception:     @StringRes val stringId: Int,
+exception:     ^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\archmodel\SettingsStore.kt:730:5: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+exception: - To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+exception: - To keep applying to the value parameter only, use the '@param:' annotation target.
+exception: 
+exception: see https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+exception:     @StringRes val stringId: Int,
+exception:     ^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\base\DIAwareViewModel.kt:5:8: warning: 'class AbstractSavedStateViewModelFactory : ViewModelProvider.OnRequeryFactory, ViewModelProvider.Factory' is deprecated. Use `viewModelFactory` or implement `ViewModelProvider.Factory`, combined with `CreationExtras.createSavedStateHandle()`.
+exception: import androidx.lifecycle.AbstractSavedStateViewModelFactory
+exception:        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\base\DIAwareViewModel.kt:75:5: warning: 'class AbstractSavedStateViewModelFactory : ViewModelProvider.OnRequeryFactory, ViewModelProvider.Factory' is deprecated. Use `viewModelFactory` or implement `ViewModelProvider.Factory`, combined with `CreationExtras.createSavedStateHandle()`.
+exception: ) : AbstractSavedStateViewModelFactory(owner, defaultArgs),
+exception:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:157:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:197:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:210:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:224:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:243:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:255:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:268:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:281:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:294:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:307:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:320:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:333:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:354:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:378:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:424:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:469:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:480:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:491:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:544:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:577:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:608:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:634:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:645:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:656:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:667:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:678:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:689:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:700:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:711:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:782:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:793:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:804:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\db\room\AppDatabase.kt:811:26: warning: the corresponding parameter in the supertype 'Migration' is named 'db'. This may cause problems when calling this function with named arguments.
+exception:     override fun migrate(database: SupportSQLiteDatabase) {
+exception:                          ^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\model\ReadAloudStateHolder.kt:73:26: warning: this declaration overrides a deprecated member but is not marked as deprecated itself. Add the '@Deprecated' annotation or suppress the diagnostic.
+exception:             override fun onError(utteranceId: String) {
+exception:                          ^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\ui\compose\feed\FeedScreen.kt:1622:44: warning: 'fun rememberPlainTooltipPositionProvider(spacingBetweenTooltipAndAnchor: Dp = ...): PopupPositionProvider' is deprecated. Deprecated in favor of rememberTooltipPositionProvider API.
+exception:         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+exception:                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\ui\compose\layouts\Table.kt:200:22: warning: non-public primary constructor is exposed via the generated 'copy()' method of the 'data' class.
+exception: 
+exception: the generated 'copy()' will change its visibility in future releases.
+exception: 
+exception: to suppress the warning do one of the following:
+exception: - Annotate the data class with the '@ConsistentCopyVisibility' annotation.
+exception: - Use the '-Xconsistent-data-class-copy-visibility' compiler flag.
+exception: - Annotate the data class with the '@ExposedCopyVisibility' annotation 
+exception:   (Discouraged, but can be used to keep binary compatibility).
+exception: 
+exception: to learn more, see the documentation of the '@ConsistentCopyVisibility' and '@ExposedCopyVisibility' annotations.
+exception: 
+exception: this will become an error in language version 2.5. See https://youtrack.jetbrains.com/issue/KT-11914.
+exception: data class TableData private constructor(
+exception:                      ^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\ui\compose\material3\SwipeableState.kt:865:70: warning: 'val Drag: NestedScrollSource' is deprecated. This has been replaced by UserInput.
+exception:                 return if (delta < 0 && source == NestedScrollSource.Drag) {
+exception:                                                                      ^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\ui\compose\material3\SwipeableState.kt:877:50: warning: 'val Drag: NestedScrollSource' is deprecated. This has been replaced by UserInput.
+exception:                 if (source == NestedScrollSource.Drag) {
+exception:                                                  ^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\ui\compose\pullrefresh\PullRefresh.kt:26:5: warning: 'fun Modifier.inspectable(noinline inspectorInfo: InspectorInfo.() -> Unit, factory: Modifier.() -> Modifier): Modifier' is deprecated. This API will create more invalidations of your modifier than necessary, so it's use is discouraged. Implementing the inspectableProperties method on ModifierNodeElement is the recommended zero-cost alternative to exposing properties on a Modifier to tooling.
+exception: ) = inspectable(
+exception:     ^^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\ui\compose\pullrefresh\PullRefresh.kt:56:5: warning: 'fun Modifier.inspectable(noinline inspectorInfo: InspectorInfo.() -> Unit, factory: Modifier.() -> Modifier): Modifier' is deprecated. This API will create more invalidations of your modifier than necessary, so it's use is discouraged. Implementing the inspectableProperties method on ModifierNodeElement is the recommended zero-cost alternative to exposing properties on a Modifier to tooling.
+exception: ) = inspectable(
+exception:     ^^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\ui\compose\pullrefresh\PullRefresh.kt:79:23: warning: 'val Drag: NestedScrollSource' is deprecated. This has been replaced by UserInput.
+exception:             source == Drag && available.y < 0 -> Offset(0f, onPull(available.y)) // Swiping up
+exception:                       ^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\ui\compose\pullrefresh\PullRefresh.kt:90:23: warning: 'val Drag: NestedScrollSource' is deprecated. This has been replaced by UserInput.
+exception:             source == Drag && available.y > 0 -> Offset(0f, onPull(available.y)) // Pulling down
+exception:                       ^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\util\ActivityLauncher.kt:109:25: warning: 'fun setToolbarColor(p0: Int): CustomTabsIntent.Builder' is deprecated. Deprecated in Java.
+exception:                         setToolbarColor(toolbarColor)
+exception:                         ^^^^^^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\util\ActivityLauncher.kt:110:25: warning: 'fun addDefaultShareMenuItem(): CustomTabsIntent.Builder' is deprecated. Deprecated in Java.
+exception:                         addDefaultShareMenuItem()
+exception:                         ^^^^^^^^^^^^^^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\util\Either.kt:358:16: warning: leaked in-place lambda 'default: (A) -> B'.
+exception:     contract { callsInPlace(default, InvocationKind.AT_MOST_ONCE) }
+exception:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+exception: app\src\main\java\com\nononsenseapps\feeder\util\Either.kt:359:17: warning: leaked in-place lambda 'default: (A) -> B'.
+exception:     return fold(default, ::identity)
+exception:                 ^^^^^^^
+
+FAILURE: Build completed with 3 failures.
+
+1: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:lintAnalyzeFdroidDebug'.
+> java.nio.file.FileSystemException: C:\Users\Nikola\AndroidStudioProjects\4a-extern\Feeder\app\build\intermediates\lint-cache\lintAnalyzeFdroidDebug\migrated-jars\androidx.compose.runtime.lint.RuntimeIssueRegistry-398cfe4c3e0a311f..jar: The process cannot access the file because it is being used by another process
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+2: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:lintAnalyzeFdroidDebugAndroidTest'.
+> java.nio.file.FileSystemException: C:\Users\Nikola\AndroidStudioProjects\4a-extern\Feeder\app\build\intermediates\lint-cache\lintAnalyzeFdroidDebugAndroidTest\migrated-jars\androidx.navigation.compose.lint.NavigationComposeIssueRegistry-598b224f0ce2f9f2..jar: The process cannot access the file because it is being used by another process
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+3: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:lintAnalyzeFdroidDebugUnitTest'.
+> java.nio.file.FileSystemException: C:\Users\Nikola\AndroidStudioProjects\4a-extern\Feeder\app\build\intermediates\lint-cache\lintAnalyzeFdroidDebugUnitTest\migrated-jars\androidx.compose.runtime.lint.RuntimeIssueRegistry-398cfe4c3e0a311f..jar: The process cannot access the file because it is being used by another process
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+BUILD FAILED in 10m 2s
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Cannot locate tasks that match ':app:lintDebug' as task 'lintDebug' is ambiguous in project ':app'. Candidates are: 'lintAnalyzeFdroidDebug', 'lintAnalyzeFdroidDebugAndroidTest', 'lintAnalyzeFdroidDebugUnitTest', 'lintFdroidDebug', 'lintFixFdroidDebug', 'lintReportFdroidDebug'.
+
+* Try:
+> Run gradlew tasks to get a list of available tasks.
+> For more on name expansion, please refer to https://docs.gradle.org/9.1.0/userguide/command_line_interface.html#sec:name_abbreviation in the Gradle documentation.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (Powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2s
+2026-02-01 e24d2df1e31bf666dace6ea33838924355ca8850 (2026-02-02): BUILD/LINT FAIL
+GOTOVO ok=0 fail=1 Tue Sep  8 20:39:10 CEDT 2026
+START Tue Sep  8 20:39:20 CEDT 2026 | tacaka za obradu: 1
+
+FAILURE: Build completed with 2 failures.
+
+1: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:lintAnalyzeFdroidDebug'.
+> java.nio.file.FileSystemException: C:\Users\Nikola\AndroidStudioProjects\4a-extern\Feeder\app\build\intermediates\lint-cache\lintAnalyzeFdroidDebug\migrated-jars\androidx.compose.runtime.lint.RuntimeIssueRegistry-398cfe4c3e0a311f..jar: The process cannot access the file because it is being used by another process
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+2: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:lintAnalyzeFdroidDebugAndroidTest'.
+> java.nio.file.FileSystemException: C:\Users\Nikola\AndroidStudioProjects\4a-extern\Feeder\app\build\intermediates\lint-cache\lintAnalyzeFdroidDebugAndroidTest\migrated-jars\androidx.navigation.compose.lint.NavigationComposeIssueRegistry-598b224f0ce2f9f2..jar: The process cannot access the file because it is being used by another process
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+BUILD FAILED in 3m 19s
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Cannot locate tasks that match ':app:lintDebug' as task 'lintDebug' is ambiguous in project ':app'. Candidates are: 'lintAnalyzeFdroidDebug', 'lintAnalyzeFdroidDebugAndroidTest', 'lintAnalyzeFdroidDebugUnitTest', 'lintFdroidDebug', 'lintFixFdroidDebug', 'lintReportFdroidDebug'.
+
+* Try:
+> Run gradlew tasks to get a list of available tasks.
+> For more on name expansion, please refer to https://docs.gradle.org/9.4.1/userguide/command_line_interface.html#sec:name_abbreviation in the Gradle documentation.
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2s
+2026-08-01 ae132fbfbc39304aaac25dd48bbc6c77faba40d8 (2026-08-02): BUILD/LINT FAIL
+GOTOVO ok=0 fail=1 Tue Sep  8 20:42:44 CEDT 2026
+START Tue Sep  8 20:44:21 CEDT 2026 | tacaka za obradu: 1
+Merna ta?ka upisana (projekat=feeder, commit=0b63187eb6bcdf0c17d54a52813a918b57cc72b1, baseline=false):
+  KLOC=37.519 @Composable=373
+  po pravilu (ukupno/zate?eno/novo): StanjeBezRemember=0/0/0, SkupaAlokacijaBezRemember=0/0/0, NestabilanTipParametra=10/0/10, HardkodovaniString=17/0/17
+  ponderisani_zbir U/Z/N=31.00/0.00/31.00
+  tu?ih upozorenja (kontekst): 266
+2025-08-01 0b63187eb6bcdf0c17d54a52813a918b57cc72b1 (2025-07-31): OK
+GOTOVO ok=1 fail=0 Tue Sep  8 20:48:29 CEDT 2026
+START Tue Sep  8 20:48:48 CEDT 2026 | tacaka za obradu: 1
+Merna ta?ka upisana (projekat=feeder, commit=e24d2df1e31bf666dace6ea33838924355ca8850, baseline=false):
+  KLOC=38.118 @Composable=375
+  po pravilu (ukupno/zate?eno/novo): StanjeBezRemember=0/0/0, SkupaAlokacijaBezRemember=0/0/0, NestabilanTipParametra=10/0/10, HardkodovaniString=17/0/17
+  ponderisani_zbir U/Z/N=31.00/0.00/31.00
+  tu?ih upozorenja (kontekst): 265
+2026-02-01 e24d2df1e31bf666dace6ea33838924355ca8850 (2026-02-02): OK
+GOTOVO ok=1 fail=0 Tue Sep  8 20:52:50 CEDT 2026
+START Tue Sep  8 20:52:59 CEDT 2026 | tacaka za obradu: 1
+Merna ta?ka upisana (projekat=feeder, commit=ae132fbfbc39304aaac25dd48bbc6c77faba40d8, baseline=false):
+  KLOC=43.308 @Composable=388
+  po pravilu (ukupno/zate?eno/novo): StanjeBezRemember=0/0/0, SkupaAlokacijaBezRemember=0/0/0, NestabilanTipParametra=12/0/12, HardkodovaniString=16/0/16
+  ponderisani_zbir U/Z/N=32.80/0.00/32.80
+  tu?ih upozorenja (kontekst): 270
+2026-08-01 ae132fbfbc39304aaac25dd48bbc6c77faba40d8 (2026-08-02): OK
+GOTOVO ok=1 fail=0 Tue Sep  8 20:56:54 CEDT 2026

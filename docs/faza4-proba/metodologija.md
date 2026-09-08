@@ -39,4 +39,35 @@ Za `spacecowboy/Feeder`, za PRVI komit svakog meseca u rasponu **2024-08 →
 
 ## Rezultat
 
-> Broj uspelih / palih tačaka i zapažanja popunjavaju se po završetku skripte.
+Zbog čestih prekida (dugačka petlja od 25 komita nije završavala pre kraja
+sesije), evaluacija je izvedena kao **kurirani skup od 6 mernih tačaka**
+raspoređenih kroz 2 godine (prvi komit izabranih meseci), svaka građena
+pojedinačno. Sve 6 uspešno izmereno (0 preskočeno u finalnom skupu).
+
+**Faktografski (bez interpretacije — interpretacija ide u rad):**
+
+| Datum | KLOC | @Composable | Stanje | Alok | Nestab | Hardkod | pond. zbir (ukupno) | dug/KLOC |
+|---|---|---|---|---|---|---|---|---|
+| 2024-08-05 | 34.22 | 353 | 0 | 0 | 1 | 7 | 8.40 | 0.245 |
+| 2025-01-31 | 35.71 | 367 | 0 | 0 | 1 | 8 | 9.40 | 0.263 |
+| 2025-04-28 | 37.89 | 379 | 0 | 0 | 10 | 17 | 31.00 | 0.818 |
+| 2025-07-31 | 37.52 | 373 | 0 | 0 | 10 | 17 | 31.00 | 0.826 |
+| 2026-02-02 | 38.12 | 375 | 0 | 0 | 10 | 17 | 31.00 | 0.813 |
+| 2026-08-02 | 43.31 | 388 | 0 | 0 | 12 | 16 | 32.80 | 0.758 |
+
+- Ponderisani zbir (ukupno) raste 8.40 → 32.80 kroz raspon; najveći skok između
+  2025-01 i 2025-04 (9.40 → 31.00).
+- `NestabilanTipParametra`: 1, 1, 10, 10, 10, 12. `HardkodovaniString`: 7, 8, 17,
+  17, 17, 16. `StanjeBezRemember` i `SkupaAlokacijaBezRemember`: 0 na svim tačkama.
+- `dug_po_kloc` (ukupno): 0.245 → 0.826 (do 2025-07), pa blago opada na 0.758
+  (2026-08) dok KLOC raste 34→43 i @Composable 353→388.
+- Feeder nema naš baseline → `novo = ukupno`, `baseline_prisutan=false` svuda.
+
+**Build-otpornost (nalaz za rad):** 3 novija komita (Gradle 9.x) prvo su pala na
+Windows file-lock nad `lint-cache/.../migrated-jars/*.jar` (zaostali Gradle
+daemon drži jar); rešeno dodavanjem `--no-daemon` (svaki lint izlazi i otpušta
+lock). Stariji komiti (Gradle 8.x) prošli bez toga. Takođe: checkout je vraćao
+non-zero zbog locka nad `gradle-wrapper.jar` iako je HEAD ispravno pomeren —
+skripta zato proverava HEAD, ne exit kod. (Dodato u lekcije.)
+
+Artefakti: `feeder-trend.csv`, `feeder-trend.html`.
