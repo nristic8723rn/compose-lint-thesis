@@ -497,3 +497,22 @@ Merna ta?ka upisana (projekat=feeder, commit=ae132fbfbc39304aaac25dd48bbc6c77fab
   tu?ih upozorenja (kontekst): 270
 2026-08-01 ae132fbfbc39304aaac25dd48bbc6c77faba40d8 (2026-08-02): OK
 GOTOVO ok=1 fail=0 Tue Sep  8 20:56:54 CEDT 2026
+edf50d6b (2025-02-15): CHECKOUT FAIL
+Merna ta?ka upisana (projekat=feeder, commit=edf50d6b0e730b2beab22dd396b216e4d2aa94a5, baseline=false):
+  KLOC=36.121 @Composable=372
+  po pravilu (ukupno/zate?eno/novo): StanjeBezRemember=0/0/0, SkupaAlokacijaBezRemember=0/0/0, NestabilanTipParametra=10/0/10, HardkodovaniString=8/0/8
+  ponderisani_zbir U/Z/N=22.00/0.00/22.00
+  tu?ih upozorenja (kontekst): 333
+edf50d6b0e730b2beab22dd396b216e4d2aa94a5 (2025-02-15): OK
+Merna ta?ka upisana (projekat=feeder, commit=d661e505c4cf225446effed04131f513aabf03c6, baseline=false):
+  KLOC=36.240 @Composable=372
+  po pravilu (ukupno/zate?eno/novo): StanjeBezRemember=0/0/0, SkupaAlokacijaBezRemember=0/0/0, NestabilanTipParametra=10/0/10, HardkodovaniString=8/0/8
+  ponderisani_zbir U/Z/N=22.00/0.00/22.00
+  tu?ih upozorenja (kontekst): 379
+d661e505c4cf225446effed04131f513aabf03c6 (2025-03-08): OK
+Merna ta?ka upisana (projekat=feeder, commit=912223419025b7d1d1775874f3b52c2ee65f259c, baseline=false):
+  KLOC=36.243 @Composable=372
+  po pravilu (ukupno/zate?eno/novo): StanjeBezRemember=0/0/0, SkupaAlokacijaBezRemember=0/0/0, NestabilanTipParametra=10/0/10, HardkodovaniString=8/0/8
+  ponderisani_zbir U/Z/N=22.00/0.00/22.00
+  tu?ih upozorenja (kontekst): 330
+912223419025b7d1d1775874f3b52c2ee65f259c (2025-04-05): OK

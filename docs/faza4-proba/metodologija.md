@@ -71,3 +71,44 @@ non-zero zbog locka nad `gradle-wrapper.jar` iako je HEAD ispravno pomeren —
 skripta zato proverava HEAD, ne exit kod. (Dodato u lekcije.)
 
 Artefakti: `feeder-trend.csv`, `feeder-trend.html`.
+
+## Provera platoa i preloma (faza 4c — git-istorijska analiza)
+
+**Plato (2025-04 → 2026-02) je STVARAN, nije artefakt merenja.** U tom rasponu
+Feeder ima 219 komita, ali fajlovi koji nose najviše nalaza su nepromenjeni:
+`LinearArticleContent.kt` (dominantni izvor NestabilanTip) i `TextSettings.kt`
+(dominantni izvor Hardkod) su **bajt-identični** izmedju c5366d88 (2025-04) i
+e24d2df1 (2026-02); od 7 fajlova-nosilaca samo 2 sporedna (OpenAISection.kt,
+Settings.kt) su dirana, bez promene agregata. Uz `--rerun-tasks` (koji nezavisno
+isključuje Gradle keš), identični brojevi (10/17) su logička posledica
+nepromenjenog izvora — dakle stvarna stabilnost duga, ne greška merenja.
+
+**Prelom (2025-01 → 2025-04, pond. zbir 9.4 → 31.0) mapira na konkretne feature-e.**
+U tom rasponu: `LinearArticleContent.kt` +206/−125 (feat #567 „anchor links" — uveo
+`idToIndex: Map<String, Int>` parametre → NestabilanTip 1→10) i `TextSettings.kt`
++704/−0 (feat #700 „custom fonts" → HardkodovaniString 8→17). Porast duga nije
+difuzan nego dolazi iz prepoznatljivih komita, što je jak materijal za rad
+(dug ulazi zajedno sa funkcionalnošću).
+
+## Lokalizacija preloma (faza 4c — 3 dodatne tačke)
+
+Dodate 3 merne tačke u prelomu (2025-02-15, 2025-03-08, 2025-04-05) razlažu
+jedinstveni skok (9.4 → 31.0) na DVA feature-koraka:
+
+| Datum | Nestab | Hardkod | pond. zbir |
+|---|---|---|---|
+| 2025-01-31 | 1 | 8 | 9.4 |
+| 2025-02-15 | **10** | 8 | 22.0 |
+| 2025-03-08 | 10 | 8 | 22.0 |
+| 2025-04-05 | 10 | 8 | 22.0 |
+| 2025-04-28 | 10 | **17** | 31.0 |
+
+- Skok NestabilanTip (1→10) dešava se do 2025-02-15 — poklapa se sa feat #567
+  „anchor links" (komit a6f64e35, 2025-02-07), koji je uveo `Map<String,Int>`
+  parametre u `LinearArticleContent.kt`.
+- Skok HardkodovaniString (8→17) dešava se izmedju 2025-04-05 i 2025-04-28 —
+  poklapa se sa feat #700 „custom fonts" (komit 41fc7178, 2025-04-06), koji je
+  dodao hardkodovane stringove u `TextSettings.kt`.
+
+Ukupno 9 mernih tačaka. Prelom je time lokalizovan na dva prepoznatljiva
+funkcionalna komita — dug ulazi zajedno sa funkcijama, a ne difuzno.
